@@ -45,7 +45,6 @@ class AudioLLMDataset(Dataset):
         text = item.get("text", "")
         audio_path = item.get("audio_paths", "")
         
-        # Process audio
         audio_features = None
         if audio_path:
             full_path = os.path.join(self.audio_dir, audio_path)
@@ -79,13 +78,12 @@ class AudioLLMDataset(Dataset):
         }
     
     def _process_audio(self, audio_path):
-        # Load audio
         try:
             waveform, sample_rate = torchaudio.load(audio_path)
 
         except Exception as e:
             print(f"Error loading {audio_path}: {e}")
-            # Return a zero tensor with correct shape as fallback
+            # return a zero tensor with correct shape as fallback
             return torch.zeros((1, self.sample_rate * self.max_audio_length))
         
         # Convert to mono if stereo
@@ -99,7 +97,7 @@ class AudioLLMDataset(Dataset):
             )
             waveform = resampler(waveform)
         
-        # Convert audio to Whisper features
+        # audio to Whisper features
         input_features = self.whisper_processor(
             waveform.squeeze().numpy(),
             sampling_rate=self.sample_rate,
@@ -109,10 +107,6 @@ class AudioLLMDataset(Dataset):
         return input_features
     
     def _process_text(self, text):
-        # Add specific prefixes if needed (e.g., "Transcribe: ")
-        # preprocessed_text = f"Transcribe: {text}"
-        
-        # Tokenize
         tokens = self.llama_tokenizer(
             text,
             padding="max_length",
@@ -120,14 +114,12 @@ class AudioLLMDataset(Dataset):
             truncation=True,
             return_tensors="pt"
         )
-        
         # Remove batch dimension for dataset
         for k, v in tokens.items():
             tokens[k] = v.squeeze(0)
             
         return tokens
 
-# Collate function to handle batching
 def collate_fn(batch):
     audio_features = torch.stack([item["audio_features"] for item in batch])
     input_ids = torch.stack([item["input_ids"] for item in batch])

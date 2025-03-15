@@ -13,7 +13,6 @@ class FrozenModelWrapper:
             return self.model(*args, **kwargs)
 
 def load_base_models(llama_model_path, whisper_model_path):
-    # Load models and ensure they're frozen
     llama = LlamaForCausalLM.from_pretrained(llama_model_path)
     whisper_encoder = WhisperModel.from_pretrained(whisper_model_path).encoder
     
@@ -22,7 +21,6 @@ def load_base_models(llama_model_path, whisper_model_path):
     
     return frozen_llama, frozen_whisper
 
-# Test function to ensure models load correctly and are frozen
 def test_base_models():
     llama, whisper = load_base_models("llama-7b", "whisper-large-v2")
     # Check models loaded correctly

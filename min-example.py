@@ -8,25 +8,19 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, WhisperProcessor, AutoTokenizer
 
-# Import our custom modules
 from models.audio_llm import AudioLLM
 from dataset import AudioLLMDataset, collate_fn
 
 def main():
-    # Set device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
     
-    # Define paths for the models (update with actual paths)
-    llama_path = "meta-llama/Llama-2-7b-hf"  # or your local path
-    whisper_path = "openai/whisper-large-v2"  # or your local path
+    llama_path = "meta-llama/Llama-3.2-3B-Instruct"  
+    whisper_path = "openai/whisper-large-v3-turbo"
     
-    # Load tokenizers and processors
-    print("Loading tokenizers and processors...")
     llama_tokenizer = AutoTokenizer.from_pretrained(llama_path)
     whisper_processor = WhisperProcessor.from_pretrained(whisper_path)
     
-    # Add special tokens for audio
     audio_start_token = "<audio>"
     audio_end_token = "</audio>"
     
@@ -94,10 +88,7 @@ def main():
     model = AudioLLM(llama_path, whisper_path)
     model.tokenizer = llama_tokenizer  # Set the tokenizer in the model
     
-    # Move model to device
     model.to(device)
-    
-    # Set model to evaluation mode
     model.eval()
     
     # Process a batch

@@ -8,8 +8,8 @@ from dataset import AudioLLMDataset, collate_fn
 def create_dataloaders(
     data_path,
     audio_dir,
-    whisper_model_id="openai/whisper-large-v2",
-    llama_model_id="meta-llama/Llama-2-7b-hf",
+    whisper_model_id="openai/whisper-large-v3-turbo",
+    llama_model_id="meta-llama/Llama-3.2-3B-Instruct",
     batch_size=8,
     train_split=0.9,
     max_audio_length=30,
