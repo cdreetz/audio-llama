@@ -18,3 +18,4 @@ old/
 checkpoints/
 llama-3.2-3b/
 wandb/
+peft_model/
