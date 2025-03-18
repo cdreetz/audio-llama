@@ -296,6 +296,7 @@ def train(args):
                     eval_loss, eval_ppl = evaluate(model, val_dataloader, device, args.fp16)
                     
                     logger.info(f"Eval loss: {eval_loss:.4f}, Perplexity: {eval_ppl:.4f}")
+                    wandb.log({"eval/loss": eval_loss, "eval/step": global_step})
                     
                     # Log metrics
                     writer.add_scalar("eval/loss", eval_loss, global_step)

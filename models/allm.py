@@ -66,22 +66,32 @@ class AudioLLM(nn.Module):
 
             combined_attention_mask = self._extend_attention_mask(
                 attention_mask,
-                audio_features.shape[1],
+                #audio_features.shape[2],
+                audio_seq_len=128
             )
+
+            if labels is not None:
+                audio_embed_len = combined_embeddings.shape[1] - text_embeddings.shape[1]
+                print(f"Audio embedding length: {audio_embed_len}, Text embedding length: {text_embeddings.shape[1]}")
+
+                batch_size = labels.shape[0]
+                audio_padding = torch.full((batch_size, audio_embed_len), -100, device=labels.device)
+                adjusted_labels = torch.cat([audio_padding, labels], dim=1)
+                print(f"Combined embedding shape: {combined_embeddings.shape}")
+                print(f"Adjusted labels shape: {adjusted_labels.shape}")
+            else:
+                adjusted_labels = labels
 
         else:
             combined_embeddings = text_embeddings
             combined_attention_mask = attention_mask
+            adjusted_labels = labels
 
-        # adjust labels if needed as they may need to account for audio tokens
-        if labels is not None and audio_features is not None:
-            # shift labels or use a loss mask to ignore predictions for audio tokens
-            pass
 
         outputs = self.llama.model(
             inputs_embeds=combined_embeddings,
             attention_mask=combined_attention_mask,
-            labels=labels,
+            labels=adjusted_labels,
             **kwargs
         )
 
@@ -175,7 +185,7 @@ class AudioLLM(nn.Module):
 
         return combined_embeddings
 
-    def _extend_attention_mask(self, attention_mask, audio_seq_len):
+    def _extend_attention_mask(self, attention_mask, audio_seq_len, has_special_tokens=True):
         """
         extends the attention mask to include prepended audio tokens
 
@@ -186,7 +196,12 @@ class AudioLLM(nn.Module):
         batch_size, text_seq_len = attention_mask.shape
         device = attention_mask.device
 
-        audio_attention = torch.ones(batch_size, audio_seq_len + 2, device=device)
+        if has_special_tokens:
+            total_audio_len = audio_seq_len + 2
+        else:
+            total_audio_len = audio_seq_len
+
+        audio_attention = torch.ones(batch_size, total_audio_len, device=device)
 
         extended_mask = torch.cat([audio_attention, attention_mask], dim=1)
 
