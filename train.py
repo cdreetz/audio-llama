@@ -182,8 +182,8 @@ def train(args):
     train_dataloader, val_dataloader = create_dataloaders(
         data_path=args.data_path,
         audio_dir=args.audio_dir,
-        whisper_model_name=args.whisper_path,
-        llama_model_name=args.llama_path,
+        whisper_model_id=args.whisper_path,
+        llama_model_id=args.llama_path,
         batch_size=args.batch_size,
         max_audio_length=args.max_audio_length,
         text_max_length=args.text_max_length,

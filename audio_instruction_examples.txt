@@ -1,0 +1,800 @@
+EXAMPLE 1
+File: 1188-133604-0005
+Audio: audio/1188/133604/1188-133604-0005.flac
+Text (instruction): Provide a transcription of this audio.
+Response: It is the head of a parrot with a little flower in his beak from a picture of carpaccio's one of his series of the life of saint george
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 2
+File: 6829-68769-0034
+Audio: audio/6829/68769/6829-68769-0034.flac
+Text (instruction): Convert this speech to text.
+Response: I'm going to see mister marshall said kenneth and discover what i can do to assist you thank you sir
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 3
+File: 1995-1837-0011
+Audio: audio/1995/1837/1995-1837-0011.flac
+Text (instruction): Convert this speech to text.
+Response: He started at the thought he hurried forth sadly
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 4
+File: 61-70970-0037
+Audio: audio/61/70970/61-70970-0037.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: His tones rang pleasantly on warrenton's ears and forthwith a good fellowship was heralded between them
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 5
+File: 7176-92135-0012
+Audio: audio/7176/92135/7176-92135-0012.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: Indeed irresolution being the keynote of hamlet's soliloquy a clever player could to some extent indicate the whole thirty lines by a silent working of the jaw but at the same time it would be idle to deny that he would miss the finer shades of the dramatist's meaning
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 6
+File: 61-70968-0023
+Audio: audio/61/70968/61-70968-0023.flac
+Text (instruction): What does the person say in this audio clip?
+Response: But i wrestled with this fellow and do know that he played unfairly in the second bout
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 7
+File: 8455-210777-0065
+Audio: audio/8455/210777/8455-210777-0065.flac
+Text (instruction): Please transcribe this audio recording.
+Response: I shall be happy to take charge of them said sir ferdinando
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 8
+File: 8224-274384-0004
+Audio: audio/8224/274384/8224-274384-0004.flac
+Text (instruction): Please transcribe this audio recording.
+Response: And the men of israel answered the men of judah and said we have ten parts in the king and we have also more right in david than ye why then did ye despise us that our advice should not be first had in bringing back our king
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 9
+File: 1221-135767-0000
+Audio: audio/1221/135767/1221-135767-0000.flac
+Text (instruction): What is being said in this audio file?
+Response: Hester prynne went one day to the mansion of governor bellingham with a pair of gloves which she had fringed and embroidered to his order and which were to be worn on some great occasion of state for though the chances of a popular election had caused this former ruler to descend a step or two from the highest rank he still held an honourable and influential place among the colonial magistracy
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 10
+File: 5683-32865-0004
+Audio: audio/5683/32865/5683-32865-0004.flac
+Text (instruction): Convert this speech to text.
+Response: Whatever lord chelford said miss brandon received it very graciously and even with a momentary smile
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 11
+File: 121-121726-0001
+Audio: audio/121/121726/121-121726-0001.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: Harangue the tiresome product of a tireless tongue
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 12
+File: 5639-40744-0028
+Audio: audio/5639/40744/5639-40744-0028.flac
+Text (instruction): Convert this speech to text.
+Response: I have great things to tell you senor said dona estafania to her husband the cream and substance of which is this the fainting girl before you is your daughter and that boy is your grandson
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 13
+File: 7127-75947-0033
+Audio: audio/7127/75947/7127-75947-0033.flac
+Text (instruction): Convert this speech to text.
+Response: How is it la valliere said mademoiselle de tonnay charente that the vicomte de bragelonne spoke of you as louise
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 14
+File: 672-122797-0023
+Audio: audio/672/122797/672-122797-0023.flac
+Text (instruction): Provide a transcription of this audio.
+Response: He well knew that he should never see his dear old comrades the little bushes and flowers around him anymore perhaps not even the birds
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 15
+File: 5142-36377-0017
+Audio: audio/5142/36377/5142-36377-0017.flac
+Text (instruction): What words were spoken in this recording?
+Response: The only cheerful conversation was the conversation across the table between naomi and me
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 16
+File: 8555-284447-0019
+Audio: audio/8555/284447/8555-284447-0019.flac
+Text (instruction): Transcribe the spoken content of this recording.
+Response: Before any could stop him he butted his majesty so furiously that the king soared far into the air and tumbled in a heap among the benches where he lay moaning and groaning
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 17
+File: 7729-102255-0011
+Audio: audio/7729/102255/7729-102255-0011.flac
+Text (instruction): Convert this speech to text.
+Response: The present chapters can only touch upon the more salient movements of the civil war in kansas which happily were not sanguinary if however the individual and more isolated cases of bloodshed could be described they would show a startling aggregate of barbarity and loss of life for opinion's sake
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 18
+File: 2300-131720-0015
+Audio: audio/2300/131720/2300-131720-0015.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: He obtained the desired speed and load with a friction brake also regulator of speed but waited for an indicator to verify it
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 19
+File: 3729-6852-0004
+Audio: audio/3729/6852/3729-6852-0004.flac
+Text (instruction): What is being said in this audio file?
+Response: Her face was an enigma for it inspired everyone with the warmest sympathy and yet if you examined it attentively there was not one beautiful feature she could not be called handsome but no one could have thought her ugly
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 20
+File: 8555-284447-0007
+Audio: audio/8555/284447/8555-284447-0007.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: Therefore her majesty paid no attention to anyone and no one paid any attention to her
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 21
+File: 5105-28240-0004
+Audio: audio/5105/28240/5105-28240-0004.flac
+Text (instruction): What is being said in this audio file?
+Response: If the count were on board a strange fatality was bringing him to the presence of his rival
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 22
+File: 61-70968-0000
+Audio: audio/61/70968/61-70968-0000.flac
+Text (instruction): Transcribe the spoken content of this recording.
+Response: He began a confused complaint against the wizard who had vanished behind the curtain on the left
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 23
+File: 1320-122617-0037
+Audio: audio/1320/122617/1320-122617-0037.flac
+Text (instruction): Please transcribe this audio recording.
+Response: The delaware dog he said leaning forward and peering through the dim light to catch the expression of the other's features is he afraid
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 24
+File: 7176-88083-0009
+Audio: audio/7176/88083/7176-88083-0009.flac
+Text (instruction): What words were spoken in this recording?
+Response: The great hawk followed hurriedly to retrieve his prey from the ground
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 25
+File: 2830-3980-0021
+Audio: audio/2830/3980/2830-3980-0021.flac
+Text (instruction): What words were spoken in this recording?
+Response: And god the father who raised him from the dead
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 26
+File: 4446-2273-0029
+Audio: audio/4446/2273/4446-2273-0029.flac
+Text (instruction): What is being said in this audio file?
+Response: It's really too warm in this room to sing don't you feel it
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 27
+File: 1320-122617-0032
+Audio: audio/1320/122617/1320-122617-0032.flac
+Text (instruction): What does the person say in this audio clip?
+Response: Keep silent as long as may be and it would be wise when you do speak to break out suddenly in one of your shoutings which will serve to remind the indians that you are not altogether as responsible as men should be
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 28
+File: 7729-102255-0017
+Audio: audio/7729/102255/7729-102255-0017.flac
+Text (instruction): Provide a transcription of this audio.
+Response: Sheriff jones had his pockets always full of writs issued in the spirit of persecution but was often baffled by the sharp wits and ready resources of the free state people and sometimes defied outright
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 29
+File: 8230-279154-0032
+Audio: audio/8230/279154/8230-279154-0032.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: It is this that is of interest to theory of knowledge
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 30
+File: 4077-13754-0014
+Audio: audio/4077/13754/4077-13754-0014.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: The people contested these measures one by one in the courts presenting in case after case the different phases of the subject and urging the unconstitutionality of the measure
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 31
+File: 7127-75947-0007
+Audio: audio/7127/75947/7127-75947-0007.flac
+Text (instruction): Convert this speech to text.
+Response: She then rose humming the air to which she was presently going to dance
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 32
+File: 61-70968-0032
+Audio: audio/61/70968/61-70968-0032.flac
+Text (instruction): What is being said in this audio file?
+Response: He felt for and found the wizard's black cloth the squire was quite out of breath
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 33
+File: 5105-28233-0008
+Audio: audio/5105/28233/5105-28233-0008.flac
+Text (instruction): What words were spoken in this recording?
+Response: When a private in the eighth cavalry he had been on the point of quitting the army at twenty eight years of age but unexpectedly he had been appointed orderly to captain servadac
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 34
+File: 1284-1180-0020
+Audio: audio/1284/1180/1284-1180-0020.flac
+Text (instruction): Provide a transcription of this audio.
+Response: The first lot we tested on our glass cat which not only began to live but has lived ever since
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 35
+File: 6829-68771-0033
+Audio: audio/6829/68771/6829-68771-0033.flac
+Text (instruction): Provide a transcription of this audio.
+Response: She rose quickly to her feet with an impetuous gesture that made her visitor catch her breath
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 36
+File: 1995-1826-0001
+Audio: audio/1995/1826/1995-1826-0001.flac
+Text (instruction): Please transcribe this audio recording.
+Response: The south she had not thought of seriously and yet knowing of its delightful hospitality and mild climate she was not averse to charleston or new orleans
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 37
+File: 2300-131720-0030
+Audio: audio/2300/131720/2300-131720-0030.flac
+Text (instruction): Convert this speech to text.
+Response: The principle employed in the edison electrolytic meter is that which exemplifies the power of electricity to decompose a chemical substance
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 38
+File: 4446-2271-0013
+Audio: audio/4446/2271/4446-2271-0013.flac
+Text (instruction): What words were spoken in this recording?
+Response: Do you know i thought the dance a bit conscious to night for the first time
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 39
+File: 6829-68769-0025
+Audio: audio/6829/68769/6829-68769-0025.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: Then rogers wouldn't do anything but lead her around and wait upon her and the place went to rack and ruin
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 40
+File: 121-127105-0029
+Audio: audio/121/127105/121-127105-0029.flac
+Text (instruction): Provide a transcription of this audio.
+Response: There were plenty of people to help but of course the young lady who should go down as governess would be in supreme authority
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 41
+File: 8463-294828-0020
+Audio: audio/8463/294828/8463-294828-0020.flac
+Text (instruction): Provide a transcription of this audio.
+Response: Yes we are certainly i replied evasively but after we make a detour
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 42
+File: 2961-961-0017
+Audio: audio/2961/961/2961-961-0017.flac
+Text (instruction): What does the person say in this audio clip?
+Response: Observe again what care the law took in the pursuit of wisdom searching out the deep things of the world and applying them to the use of man
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 43
+File: 7127-75947-0029
+Audio: audio/7127/75947/7127-75947-0029.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: The young girls had indeed made themselves small indeed invisible
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 44
+File: 8555-284449-0010
+Audio: audio/8555/284449/8555-284449-0010.flac
+Text (instruction): Convert this speech to text.
+Response: It will be such a satisfaction
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 45
+File: 260-123440-0002
+Audio: audio/260/123440/260-123440-0002.flac
+Text (instruction): Provide a transcription of this audio.
+Response: It was the white rabbit returning splendidly dressed with a pair of white kid gloves in one hand and a large fan in the other he came trotting along in a great hurry muttering to himself as he came oh the duchess the duchess
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 46
+File: 5142-33396-0033
+Audio: audio/5142/33396/5142-33396-0033.flac
+Text (instruction): Convert this speech to text.
+Response: You would not eat with us you cannot say no to half of my ale i drink this to your health
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 47
+File: 908-31957-0002
+Audio: audio/908/31957/908-31957-0002.flac
+Text (instruction): What does the person say in this audio clip?
+Response: I did not wrong myself so but i placed a wrong on thee
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 48
+File: 1580-141084-0036
+Audio: audio/1580/141084/1580-141084-0036.flac
+Text (instruction): Transcribe the spoken content of this recording.
+Response: The indian i also thought nothing of
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 49
+File: 1221-135767-0009
+Audio: audio/1221/135767/1221-135767-0009.flac
+Text (instruction): What is being said in this audio file?
+Response: But pearl who was a dauntless child after frowning stamping her foot and shaking her little hand with a variety of threatening gestures suddenly made a rush at the knot of her enemies and put them all to flight
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 50
+File: 1320-122617-0016
+Audio: audio/1320/122617/1320-122617-0016.flac
+Text (instruction): What does the person say in this audio clip?
+Response: The cunning man is afraid that his breath will blow upon his brothers and take away their courage too continued david improving the hint he received they must stand further off
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 51
+File: 4507-16021-0035
+Audio: audio/4507/16021/4507-16021-0035.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: True history being a mixture of all things the true historian mingles in everything
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 52
+File: 1188-133604-0024
+Audio: audio/1188/133604/1188-133604-0024.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: Nothing will be more precious to you i think in the practical study of art than the conviction which will force itself on you more and more every hour of the way all things are bound together little and great in spirit and in matter
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 53
+File: 1188-133604-0016
+Audio: audio/1188/133604/1188-133604-0016.flac
+Text (instruction): What is being said in this audio file?
+Response: This at once compels you to understand that the work is to be imaginative and decorative that it represents beautiful things in the clearest way but not under existing conditions and that in fact you are producing jeweler's work rather than pictures
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 54
+File: 121-123852-0000
+Audio: audio/121/123852/121-123852-0000.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: Those pretty wrongs that liberty commits when i am sometime absent from thy heart thy beauty and thy years full well befits for still temptation follows where thou art
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 55
+File: 4446-2271-0005
+Audio: audio/4446/2271/4446-2271-0005.flac
+Text (instruction): What words were spoken in this recording?
+Response: She saves her hand too she's at her best in the second act
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 56
+File: 672-122797-0042
+Audio: audio/672/122797/672-122797-0042.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: But they dragged him out of the room and up the stairs into the loft and here in a dark corner where no daylight could enter they left him
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 57
+File: 1580-141084-0009
+Audio: audio/1580/141084/1580-141084-0009.flac
+Text (instruction): Convert this speech to text.
+Response: It is possible that i may be in a position then to indicate some course of action
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 58
+File: 908-31957-0013
+Audio: audio/908/31957/908-31957-0013.flac
+Text (instruction): What is being said in this audio file?
+Response: Slow to world greetings quick with its o list when the angels speak
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 59
+File: 5142-36377-0015
+Audio: audio/5142/36377/5142-36377-0015.flac
+Text (instruction): What is being said in this audio file?
+Response: Our first impressions of people are in nine cases out of ten the right impressions
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 60
+File: 1580-141083-0022
+Audio: audio/1580/141083/1580-141083-0022.flac
+Text (instruction): What is being said in this audio file?
+Response: I am afraid there are no signs here said he
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 61
+File: 7021-79730-0003
+Audio: audio/7021/79730/7021-79730-0003.flac
+Text (instruction): What does the person say in this audio clip?
+Response: As the chaise drives away mary stands bewildered and perplexed on the door step her mind in a tumult of excitement in which hatred of the doctor distrust and suspicion of her mother disappointment vexation and ill humor surge and swell among those delicate organizations on which the structure and development of the soul so closely depend doing perhaps an irreparable injury
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 62
+File: 7127-75947-0016
+Audio: audio/7127/75947/7127-75947-0016.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: Oh mademoiselle why have i not a devoted sister or a true friend such as yourself
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 63
+File: 6930-81414-0000
+Audio: audio/6930/81414/6930-81414-0000.flac
+Text (instruction): Transcribe the spoken content of this recording.
+Response: No words were spoken no language was uttered save that of wailing and hissing and that somehow was indistinct as if it existed in fancy and not in reality
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 64
+File: 237-134500-0014
+Audio: audio/237/134500/237-134500-0014.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: And emil mowed his way slowly down toward the cherry trees
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 65
+File: 1221-135767-0019
+Audio: audio/1221/135767/1221-135767-0019.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: Mother cried she i see you here look look
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 66
+File: 5639-40744-0038
+Audio: audio/5639/40744/5639-40744-0038.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: Just at the moment when the tears of the pitying beholders flowed fastest and their ejaculations were most expressive of despair leocadia gave signs of recovery and brought back gladness to the hearts of all
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 67
+File: 7729-102255-0040
+Audio: audio/7729/102255/7729-102255-0040.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: In this incident contrasting the creative and the destructive spirit of the factions the emigrant aid society of massachusetts finds its most honorable and triumphant vindication
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 68
+File: 1089-134686-0006
+Audio: audio/1089/134686/1089-134686-0006.flac
+Text (instruction): Provide a transcription of this audio.
+Response: The dull light fell more faintly upon the page whereon another equation began to unfold itself slowly and to spread abroad its widening tail
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 69
+File: 908-157963-0012
+Audio: audio/908/157963/908-157963-0012.flac
+Text (instruction): What is being said in this audio file?
+Response: But thel is like a faint cloud kindled at the rising sun i vanish from my pearly throne and who shall find my place
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 70
+File: 8463-287645-0012
+Audio: audio/8463/287645/8463-287645-0012.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: Substantially this was jacob's unvarnished description of his master and mistress
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 71
+File: 1089-134691-0017
+Audio: audio/1089/134691/1089-134691-0017.flac
+Text (instruction): What is being said in this audio file?
+Response: The europe they had come from lay out there beyond the irish sea europe of strange tongues and valleyed and woodbegirt and citadelled and of entrenched and marshalled races
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 72
+File: 672-122797-0068
+Audio: audio/672/122797/672-122797-0068.flac
+Text (instruction): Transcribe the spoken content of this recording.
+Response: But it was not the fir tree that they meant
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 73
+File: 6930-81414-0026
+Audio: audio/6930/81414/6930-81414-0026.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: My overwrought nerves yielded at last
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 74
+File: 1995-1836-0000
+Audio: audio/1995/1836/1995-1836-0000.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: The hon charles smith miss sarah's brother was walking swiftly uptown from mister easterly's wall street office and his face was pale
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 75
+File: 1580-141084-0039
+Audio: audio/1580/141084/1580-141084-0039.flac
+Text (instruction): Convert this speech to text.
+Response: I entered and i took you into my confidence as to the suggestions of the side table
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 76
+File: 61-70970-0015
+Audio: audio/61/70970/61-70970-0015.flac
+Text (instruction): Please transcribe this audio recording.
+Response: Will cried he softly and stuteley who had chosen his couch across the door of his young master's chamber sprang up at once in answer
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 77
+File: 260-123286-0016
+Audio: audio/260/123286/260-123286-0016.flac
+Text (instruction): What words were spoken in this recording?
+Response: These thoughts agitated me all day and my imagination scarcely calmed down after several hours sleep
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 78
+File: 260-123288-0007
+Audio: audio/260/123288/260-123288-0007.flac
+Text (instruction): What does the person say in this audio clip?
+Response: The wind never lulls but to acquire increased strength the vast bank of heavy clouds is a huge reservoir of fearful windy gusts and rushing storms
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 79
+File: 3570-5694-0004
+Audio: audio/3570/5694/3570-5694-0004.flac
+Text (instruction): Provide a transcription of this audio.
+Response: In the nature of things luxuries and the comforts of life belong to the leisure class
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 80
+File: 7127-75947-0002
+Audio: audio/7127/75947/7127-75947-0002.flac
+Text (instruction): Convert this speech to text.
+Response: Do you think so she replied with indifference
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 81
+File: 672-122797-0016
+Audio: audio/672/122797/672-122797-0016.flac
+Text (instruction): Please transcribe this audio recording.
+Response: Yes then something better something still grander will surely follow or wherefore should they thus ornament me
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 82
+File: 260-123288-0023
+Audio: audio/260/123288/260-123288-0023.flac
+Text (instruction): What is being said in this audio file?
+Response: He nods his consent
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 83
+File: 2300-131720-0033
+Audio: audio/2300/131720/2300-131720-0033.flac
+Text (instruction): Provide a transcription of this audio.
+Response: In december eighteen eighty eight mister w j jenks read an interesting paper before the american institute of electrical engineers on the six years of practical experience had up to that time with the meter then more generally in use than any other
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 84
+File: 61-70968-0034
+Audio: audio/61/70968/61-70968-0034.flac
+Text (instruction): Provide a transcription of this audio.
+Response: A montfichet a montfichet gamewell to the rescue
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 85
+File: 7176-88083-0000
+Audio: audio/7176/88083/7176-88083-0000.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: All about him was a tumult of bright and broken color scattered in broad splashes
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 86
+File: 5142-33396-0053
+Audio: audio/5142/33396/5142-33396-0053.flac
+Text (instruction): Please transcribe this audio recording.
+Response: I took five great bracelets of gold from our treasure chest and gave them to him
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 87
+File: 5639-40744-0003
+Audio: audio/5639/40744/5639-40744-0003.flac
+Text (instruction): What is being said in this audio file?
+Response: In a moment he communicated his thoughts to his companions and in the next moment they resolved to turn back and carry her off to please rodolfo for the rich who are open handed always find parasites ready to encourage their bad propensities and thus to conceive this wicked design to communicate it approve it resolve on ravishing leocadia and to carry that design into effect was the work of a moment
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 88
+File: 2961-961-0014
+Audio: audio/2961/961/2961-961-0014.flac
+Text (instruction): Convert this speech to text.
+Response: Nine thousand years have elapsed since she founded yours and eight thousand since she founded ours as our annals record
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 89
+File: 5683-32879-0020
+Audio: audio/5683/32879/5683-32879-0020.flac
+Text (instruction): Provide a transcription of this audio.
+Response: And she threw her arms round her cousin's neck and brave rachel at last burst into tears
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 90
+File: 4446-2273-0009
+Audio: audio/4446/2273/4446-2273-0009.flac
+Text (instruction): What does the person say in this audio clip?
+Response: It's not particularly rare she said but some of it was my mother's
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 91
+File: 237-126133-0006
+Audio: audio/237/126133/237-126133-0006.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: At this the bundle opened suddenly and out popped phronsie
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 92
+File: 4446-2271-0014
+Audio: audio/4446/2271/4446-2271-0014.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: Westmere and i were back after the first act and we thought she seemed quite uncertain of herself
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 93
+File: 260-123286-0024
+Audio: audio/260/123286/260-123286-0024.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: There's a whale a whale cried the professor
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 94
+File: 3575-170457-0043
+Audio: audio/3575/170457/3575-170457-0043.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: However remembering what you told me namely that you had commended the matter to a higher decision than ours and that you were resolved to submit with resignation to that decision whatever it might be i hold it my duty to yield also and to be silent it may be all for the best
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 95
+File: 1580-141083-0028
+Audio: audio/1580/141083/1580-141083-0028.flac
+Text (instruction): Convert this speech to text.
+Response: Then he tossed it down and seized the next
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 96
+File: 61-70970-0012
+Audio: audio/61/70970/61-70970-0012.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: Yet he will teach you a few tricks when morning is come
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 97
+File: 2830-3980-0006
+Audio: audio/2830/3980/2830-3980-0006.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: Against these boasting false apostles paul boldly defends his apostolic authority and ministry
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 98
+File: 4970-29095-0028
+Audio: audio/4970/29095/4970-29095-0028.flac
+Text (instruction): What is being said in this audio file?
+Response: He doesn't say but it's on the frontier and on the map everything beyond it is marked indians and desert and looks as desolate as a wednesday meeting humph it was time for him to do something
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 99
+File: 237-134500-0006
+Audio: audio/237/134500/237-134500-0006.flac
+Text (instruction): What is being said in this audio file?
+Response: Just smell the wild roses they are always so spicy after a rain
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 100
+File: 2830-3980-0020
+Audio: audio/2830/3980/2830-3980-0020.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: This is no sinful pride it is holy pride
+
+--------------------------------------------------------------------------------
+

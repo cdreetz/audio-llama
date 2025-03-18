@@ -2,8 +2,10 @@ import os
 import json
 import torch
 import random
+from torch.utils.data import DataLoader
 from transformers import WhisperProcessor, LlamaTokenizer
 from dataset import AudioLLMDataset, collate_fn
+
 
 def create_dataloaders(
     data_path,
@@ -86,7 +88,7 @@ def create_dataloaders(
         pin_memory=True
     )
     
-    return train_loader, val_loader
+    return train_dataloader, val_dataloader
 
 def get_sample_batch(dataloader):
     dataiter = iter(dataloader)

@@ -54,7 +54,7 @@ class AudioLLMDataset(Dataset):
             text,
             padding="max_length",
             truncation=True,
-            max_length=self.max_audio_length,
+            max_length=self.text_max_length,
             return_tensors="pt"
         )
 
@@ -63,7 +63,7 @@ class AudioLLMDataset(Dataset):
             response,
             padding="max_length",
             truncation=True,
-            max_length=self.max_audio_length,
+            max_length=self.text_max_length,
             return_tensors="pt"
         )
 
