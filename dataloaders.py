@@ -3,7 +3,7 @@ import json
 import torch
 import random
 from torch.utils.data import DataLoader
-from transformers import WhisperProcessor, LlamaTokenizer
+from transformers import WhisperProcessor, LlamaTokenizer, AutoTokenizer
 from dataset import AudioLLMDataset, collate_fn
 
 
@@ -39,7 +39,8 @@ def create_dataloaders(
 
     # Load processors
     whisper_processor = WhisperProcessor.from_pretrained(whisper_model_id)
-    llama_tokenizer = LlamaTokenizer.from_pretrained(llama_model_id)
+    llama_tokenizer = AutoTokenizer.from_pretrained(llama_model_id)
+    llama_tokenizer.pad_token = llama_tokenizer.eos_token
 
     with open(data_path, 'r', encoding='utf-8') as f:
         data_entries = json.load(f)

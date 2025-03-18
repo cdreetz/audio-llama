@@ -7,11 +7,11 @@ import numpy as np
 from tqdm import tqdm
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from transformers import LlamaTokenizer, WhisperProcessor
+from transformers import LlamaTokenizer, WhisperProcessor, AutoTokenizer
 from torch.utils.tensorboard import SummaryWriter
 
-from models.audio_llm import AudioLLM
-from dataloader import create_dataloaders
+from models.allm import AudioLLM
+from dataloaders import create_dataloaders
 
 # Configure logging
 logging.basicConfig(
@@ -170,7 +170,8 @@ def train(args):
     logger.info(f"Using device: {device}")
     
     # Load tokenizers/processors
-    llama_tokenizer = LlamaTokenizer.from_pretrained(args.llama_path)
+    llama_tokenizer = AutoTokenizer.from_pretrained(args.llama_path)
+    llama_tokenizer.pad_token = llama_tokenizer.eos_token
     whisper_processor = WhisperProcessor.from_pretrained(args.whisper_path)
     
     # Add special tokens for audio
@@ -198,6 +199,7 @@ def train(args):
         whisper_path=args.whisper_path,
         lora_rank=args.lora_rank
     )
+    model.llama.model.resize_token_embeddings(len(llama_tokenizer))
     
     # Set tokenizer in model
     model.tokenizer = llama_tokenizer

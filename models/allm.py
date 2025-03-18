@@ -13,9 +13,12 @@ class AudioLLM(nn.Module):
         self.llama, self.whisper_encoder = load_base_models(llama_path, whisper_path)
         
         # Create projector (from Whisper dim to LLaMA dim)
-        whisper_dim = self.whisper_encoder.model.config.d_model  # e.g., 1024
+        #whisper_dim = self.whisper_encoder.model.config.d_model  # e.g., 1024
+        features_dim = 128
         llama_dim = self.llama.model.config.hidden_size  # e.g., 4096
-        self.projector = AudioProjector(whisper_dim, llama_dim)
+        print(f"Whisper dimension: {features_dim}, LLaMA dimension: {llama_dim}")
+
+        self.projector = AudioProjector(features_dim, llama_dim)
         
         # Apply LoRA to LLaMA
         self.lora_layers = apply_lora_to_llama(self.llama.model, rank=lora_rank)
@@ -43,7 +46,13 @@ class AudioLLM(nn.Module):
             attention_mask: Attention mask for text [batch_size, seq_len]
             audio_features: Processed audio features [batch_size, seq_len, audio_seq_len, feat_dim]
             labels: Target output IDs for training [batch_size, seq_len]
+
         """
+        device = input_ids.device
+
+        if next(self.llama.model.parameters()).device != device:
+            self.llama.model = self.llama.model.to(device)
+
         # 1. get embeddings from llama model directly
         text_embeddings = self.llama.model.model.embed_tokens(input_ids)
 
@@ -91,18 +100,41 @@ class AudioLLM(nn.Module):
         Returns:
             combined_embeddings: [batch_size, combined_seq_len, hidden_dim]
         """
+        print(f"Text embeddings shape: {text_embeddings.shape}")
+        print(f"Audio features shape: {audio_features.shape}")
         batch_size, text_seq_len, hidden_dim = text_embeddings.shape
         device = text_embeddings.device
 
         if audio_features is None:
             return text_embeddings
 
+        batch_size, channels, features, time = audio_features.shape
+        reshaped_audio = audio_features.squeeze(1).permute(0, 2, 1)
+        print(f"Reshaped audio features: {reshaped_audio.shape}")
+
+        if time > 128:
+            # option 1 take every nth frame
+            # option 2 use adaptive pooling
+            pool = nn.AdaptiveAvgPool1d(128)
+            downsampled_audio = pool(reshaped_audio.transpose(1, 2)).transpose(1, 2)
+            print(f"Downsampled audio features from {reshaped_audio.shape} to {downsampled_audio.shape}")
+            reshaped_audio = downsampled_audio
+
+
+
         # process audio features through projector
-        projected_audio = self.projector(audio_features)
+        projected_audio = self.projector(reshaped_audio)
 
         # add audio start/end token embeddings
         audio_start_id = self.tokenizer.convert_tokens_to_ids(self.audio_start_token)
         audio_end_id = self.tokenizer.convert_tokens_to_ids(self.audio_end_token)
+
+        vocab_size = self.llama.model.model.embed_tokens.weight.shape[0]
+        print(f"Audio start token ID: {audio_start_id}, Audio end token ID: {audio_end_id}, Vocab size: {vocab_size}")
+
+        # Make sure the IDs are valid
+        if audio_start_id >= vocab_size or audio_end_id >= vocab_size:
+            raise ValueError(f"Token IDs {audio_start_id}, {audio_end_id} are outside vocabulary size {vocab_size}")
 
         audio_start_tokens = torch.tensor([[audio_start_id]] * batch_size, device=device)
         audio_end_tokens = torch.tensor([[audio_end_id]] * batch_size, device=device)
@@ -118,14 +150,26 @@ class AudioLLM(nn.Module):
         print(f"audio_end_embedding shape: {audio_end_embedding.shape}")
         print(f"text_embedding shape: {text_embeddings.shape}")
 
+        audio_start_embedding = audio_start_embedding.to(device)
+        projected_audio = projected_audio.to(device)
+        audio_end_embedding = audio_end_embedding.to(device)
+        text_embeddings = text_embeddings.to(device)
+
+        print(f"audio_start_embedding device: {audio_start_embedding.device}")
+        print(f"projected_audio device: {projected_audio.device}")
+        print(f"audio_end_embedding device: {audio_end_embedding.device}")
+        print(f"text_embedding device: {text_embeddings.device}")
+
 
         # concatenate: <audio> + audio_embeddings + </audio> + text_embeddings
-        combined_embeddings = torch.cat([
-            audio_start_embedding,
-            projected_audio,
-            audio_end_embedding,
-            text_embeddings
-        ], dim=1)
+        #combined_embeddings = torch.cat([
+        #    audio_start_embedding,
+        #    projected_audio,
+        #    audio_end_embedding,
+        #    text_embeddings
+        #], dim=1)
+
+        combined_embeddings = torch.cat([projected_audio, text_embeddings], dim=1)
 
         print(f"Final combined shape: {combined_embeddings.shape}")
 
@@ -155,6 +199,17 @@ class AudioLLM(nn.Module):
         for lora in self.lora_layers.values():
             params.extend(list(lora.parameters()))
         return params
+
+    def to(self, device):
+        self.llama.to(device)
+        self.whisper_encoder.to(device)
+
+        self.projector = self.projector.to(device)
+
+        for layer_name in self.lora_layers:
+            self.lora_layers[layer_name] = self.lora_layers[layer_name].to(device)
+
+        return super().to(device)
 
 # Test function for integrated model
 def test_integration():

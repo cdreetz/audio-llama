@@ -12,6 +12,10 @@ class FrozenModelWrapper:
         with torch.no_grad():
             return self.model(*args, **kwargs)
 
+    def to(self, device):
+        self.model = self.model.to(device)
+        return self
+
 def load_base_models(llama_model_path, whisper_model_path):
     llama = LlamaForCausalLM.from_pretrained(llama_model_path)
     whisper_encoder = WhisperModel.from_pretrained(whisper_model_path).encoder

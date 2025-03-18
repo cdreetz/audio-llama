@@ -14,3 +14,7 @@ audioLLM_project/
 
 
 old/
+.ipynb_checkpoints/
+checkpoints/
+llama-3.2-3b/
+wandb/
