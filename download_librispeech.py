@@ -6,6 +6,18 @@ import requests
 from tqdm import tqdm
 from pathlib import Path
 import concurrent.futures
+import argparse
+
+# LibriSpeech dataset subsets and their URLs
+LIBRISPEECH_SUBSETS = {
+    "test-clean": "https://www.openslr.org/resources/12/test-clean.tar.gz",
+    "test-other": "https://www.openslr.org/resources/12/test-other.tar.gz",
+    "dev-clean": "https://www.openslr.org/resources/12/dev-clean.tar.gz",
+    "dev-other": "https://www.openslr.org/resources/12/dev-other.tar.gz",
+    "train-clean-100": "https://www.openslr.org/resources/12/train-clean-100.tar.gz",
+    "train-clean-360": "https://www.openslr.org/resources/12/train-clean-360.tar.gz",
+    "train-other-500": "https://www.openslr.org/resources/12/train-other-500.tar.gz"
+}
 
 def download_file(url, output_path):
     """Download a file with progress tracking."""
@@ -32,18 +44,17 @@ def extract_tar(tar_path, extract_dir):
                 tar.extract(member, path=extract_dir)
                 bar.update(1)
 
-def process_librispeech(download_dir, audio_dir, metadata_path):
-    """Process LibriSpeech dataset to create metadata and organize audio files."""
-    # Create metadata dictionary
-    metadata = []
-    
-    # Process the test-clean directory
+def process_subset(subset_name, download_dir, audio_dir, metadata_list):
+    """Process a LibriSpeech subset to create metadata and organize audio files."""
+    # Process the subset directory
     extract_dir = os.path.join(download_dir, "LibriSpeech")
-    test_clean_dir = os.path.join(extract_dir, "test-clean")
+    subset_dir = os.path.join(extract_dir, subset_name)
+    
+    print(f"Processing {subset_name} directory...")
     
     # Convert flac files to desired format and build metadata
-    for speaker_id in os.listdir(test_clean_dir):
-        speaker_path = os.path.join(test_clean_dir, speaker_id)
+    for speaker_id in os.listdir(subset_dir):
+        speaker_path = os.path.join(subset_dir, speaker_id)
         if not os.path.isdir(speaker_path):
             continue
             
@@ -71,7 +82,7 @@ def process_librispeech(download_dir, audio_dir, metadata_path):
                         file_id = os.path.splitext(file_name)[0]
                         
                         # Create structure in audio directory
-                        output_dir = os.path.join(audio_dir, speaker_id, chapter_id)
+                        output_dir = os.path.join(audio_dir, subset_name, speaker_id, chapter_id)
                         os.makedirs(output_dir, exist_ok=True)
                         
                         # Copy the audio file
@@ -79,50 +90,116 @@ def process_librispeech(download_dir, audio_dir, metadata_path):
                         dst_path = os.path.join(output_dir, file_name)
                         shutil.copy2(src_path, dst_path)
                         
-                        # Get duration (this would require additional library, using placeholder)
-                        # In a real implementation, you could use librosa or pydub to get actual duration
-                        
                         if file_id in transcriptions:
                             # Add to metadata
-                            metadata.append({
+                            metadata_list.append({
                                 "audio_path": os.path.relpath(dst_path, start=os.path.dirname(audio_dir)),
                                 "speaker_id": speaker_id,
                                 "chapter_id": chapter_id,
                                 "file_id": file_id,
+                                "subset": subset_name,
                                 "transcription": transcriptions[file_id]
                             })
     
-    # Save metadata to JSON file
-    with open(metadata_path, 'w', encoding='utf-8') as f:
-        json.dump(metadata, f, ensure_ascii=False, indent=2)
+    return metadata_list
+
+def download_and_process_subset(subset, download_dir, audio_dir, force_download=False):
+    """Download and process a specific LibriSpeech subset."""
+    if subset not in LIBRISPEECH_SUBSETS:
+        print(f"Unknown subset: {subset}")
+        return []
     
-    print(f"Created metadata for {len(metadata)} audio files")
+    url = LIBRISPEECH_SUBSETS[subset]
+    tar_path = os.path.join(download_dir, f"{subset}.tar.gz")
+    
+    # Download file if it doesn't exist or force_download is True
+    if force_download or not os.path.exists(tar_path):
+        download_file(url, tar_path)
+    else:
+        print(f"Skipping download for {subset} (file already exists)")
+    
+    # Extract archive if the subset directory doesn't exist
+    subset_dir = os.path.join(download_dir, "LibriSpeech", subset)
+    if not os.path.exists(subset_dir):
+        extract_tar(tar_path, download_dir)
+    else:
+        print(f"Skipping extraction for {subset} (directory already exists)")
+    
+    # Process subset and return its metadata
+    metadata = []
+    metadata = process_subset(subset, download_dir, audio_dir, metadata)
+    return metadata
 
 def main():
-    # URLs and paths
-    LIBRISPEECH_URL = "https://www.openslr.org/resources/12/test-clean.tar.gz"
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Download and process LibriSpeech dataset')
+    parser.add_argument('--subsets', nargs='+', default=['test-clean'],
+                        help='LibriSpeech subsets to download and process')
+    parser.add_argument('--download-dir', default='downloads',
+                        help='Directory to store downloaded files')
+    parser.add_argument('--audio-dir', default='audio',
+                        help='Directory to store processed audio files')
+    parser.add_argument('--metadata-path', default='librispeech_metadata.json',
+                        help='Path to save the metadata JSON file')
+    parser.add_argument('--force-download', action='store_true',
+                        help='Force download even if files already exist')
+    parser.add_argument('--parallel', action='store_true',
+                        help='Process subsets in parallel (warning: uses more disk space and bandwidth)')
+    
+    args = parser.parse_args()
     
     # Create directories
-    download_dir = "downloads"
-    audio_dir = "audio"
-    os.makedirs(download_dir, exist_ok=True)
-    os.makedirs(audio_dir, exist_ok=True)
+    os.makedirs(args.download_dir, exist_ok=True)
+    os.makedirs(args.audio_dir, exist_ok=True)
     
-    # Download file
-    tar_path = os.path.join(download_dir, "test-clean.tar.gz")
-    if not os.path.exists(tar_path):
-        download_file(LIBRISPEECH_URL, tar_path)
+    # Validate requested subsets
+    valid_subsets = [s for s in args.subsets if s in LIBRISPEECH_SUBSETS]
+    invalid_subsets = [s for s in args.subsets if s not in LIBRISPEECH_SUBSETS]
     
-    # Extract archive
-    if not os.path.exists(os.path.join(download_dir, "LibriSpeech", "test-clean")):
-        extract_tar(tar_path, download_dir)
+    if invalid_subsets:
+        print(f"Warning: Unknown subsets will be skipped: {', '.join(invalid_subsets)}")
     
-    # Process dataset and create metadata
-    metadata_path = "librispeech_test_clean_metadata.json"
-    process_librispeech(download_dir, audio_dir, metadata_path)
+    if not valid_subsets:
+        print("No valid subsets specified. Available subsets:")
+        for subset in LIBRISPEECH_SUBSETS:
+            print(f"  - {subset}")
+        return
     
-    print(f"Processing complete! Metadata saved to {metadata_path}")
-    print(f"Audio files saved to {audio_dir}")
+    all_metadata = []
+    
+    if args.parallel and len(valid_subsets) > 1:
+        # Process subsets in parallel
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_to_subset = {
+                executor.submit(download_and_process_subset, subset, args.download_dir, args.audio_dir, args.force_download): subset
+                for subset in valid_subsets
+            }
+            
+            for future in concurrent.futures.as_completed(future_to_subset):
+                subset = future_to_subset[future]
+                try:
+                    subset_metadata = future.result()
+                    all_metadata.extend(subset_metadata)
+                    print(f"Completed processing {subset} with {len(subset_metadata)} entries")
+                except Exception as e:
+                    print(f"Error processing {subset}: {e}")
+    else:
+        # Process subsets sequentially
+        for subset in valid_subsets:
+            try:
+                subset_metadata = download_and_process_subset(subset, args.download_dir, args.audio_dir, args.force_download)
+                all_metadata.extend(subset_metadata)
+                print(f"Completed processing {subset} with {len(subset_metadata)} entries")
+            except Exception as e:
+                print(f"Error processing {subset}: {e}")
+    
+    # Save metadata to JSON file
+    with open(args.metadata_path, 'w', encoding='utf-8') as f:
+        json.dump(all_metadata, f, ensure_ascii=False, indent=2)
+    
+    print(f"Processing complete! Metadata saved to {args.metadata_path}")
+    print(f"Total entries: {len(all_metadata)}")
+    print(f"Audio files saved to {args.audio_dir}")
 
 if __name__ == "__main__":
     main()
