@@ -226,6 +226,94 @@ class AudioLLM(nn.Module):
 
         return super().to(device)
 
+
+    def generate(self, 
+                input_ids=None, 
+                attention_mask=None, 
+                audio_features=None, 
+                max_new_tokens=256, 
+                temperature=0.7, 
+                top_p=0.9, 
+                do_sample=True,
+                **kwargs):
+        """
+        Generate text with optional audio context
+        
+        Args:
+            input_ids: Text token IDs [batch_size, seq_len]
+            attention_mask: Attention mask for text [batch_size, seq_len]
+            audio_features: Processed audio features [batch_size, channels, features, time]
+            max_new_tokens: Maximum number of tokens to generate
+            temperature: Sampling temperature (0 for greedy)
+            top_p: Top-p sampling parameter
+            do_sample: Whether to use sampling or greedy decoding
+            **kwargs: Additional generation parameters passed to LLaMA
+            
+        Returns:
+            generated_text: The generated text as a string
+        """
+        self.eval()
+        device = input_ids.device
+        
+        # Get the initial text embeddings
+        text_embeddings = self.llama.model.model.embed_tokens(input_ids)
+        
+        # Combine with audio if provided
+        if audio_features is not None:
+            combined_embeddings = self._combine_text_and_audio_embeddings(
+                text_embeddings,
+                audio_features,
+                input_ids
+            )
+            
+            # Create extended attention mask that includes audio tokens
+            batch_size, text_seq_len = attention_mask.shape
+            audio_seq_len = combined_embeddings.shape[1] - text_embeddings.shape[1]
+            audio_attention = torch.ones(batch_size, audio_seq_len, device=device)
+            combined_attention_mask = torch.cat([audio_attention, attention_mask], dim=1)
+        else:
+            combined_embeddings = text_embeddings
+            combined_attention_mask = attention_mask
+        
+        # Set LLaMA's generation parameters
+        generation_config = {
+            "max_new_tokens": max_new_tokens,
+            "temperature": temperature,
+            "top_p": top_p,
+            "do_sample": do_sample,
+            "pad_token_id": self.tokenizer.pad_token_id if hasattr(self, 'tokenizer') and self.tokenizer is not None else None,
+            "bos_token_id": self.tokenizer.bos_token_id if hasattr(self, 'tokenizer') and self.tokenizer is not None else None,
+            "eos_token_id": self.tokenizer.eos_token_id if hasattr(self, 'tokenizer') and self.tokenizer is not None else None,
+        }
+        
+        # Add any additional kwargs
+        generation_config.update(kwargs)
+        
+        # Generate tokens
+        with torch.no_grad():
+            outputs = self.llama.model.generate(
+                inputs_embeds=combined_embeddings,
+                attention_mask=combined_attention_mask,
+                **generation_config
+            )
+        
+        # Calculate where the actual generated content starts
+        input_length = input_ids.shape[1]
+        if audio_features is not None:
+            input_length += audio_seq_len
+        
+        # Get only the newly generated tokens
+        generated_tokens = outputs[0, input_length:]
+        
+        # Decode to text
+        if hasattr(self, 'tokenizer') and self.tokenizer is not None:
+            generated_text = self.tokenizer.decode(generated_tokens, skip_special_tokens=True)
+        else:
+            # If tokenizer isn't available in the model, return the token IDs
+            generated_text = generated_tokens
+        
+        return generated_text
+
 # Test function for integrated model
 def test_integration():
     model = AudioLLM("llama-7b", "whisper-large-v2")

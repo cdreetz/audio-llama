@@ -54,7 +54,7 @@ def parse_args():
                         help="Peak learning rate")
     parser.add_argument("--weight_decay", type=float, default=0.01, 
                         help="Weight decay")
-    parser.add_argument("--warmup_steps", type=int, default=500, 
+    parser.add_argument("--warmup_steps", type=int, default=25, 
                         help="Learning rate warmup steps")
     parser.add_argument("--max_grad_norm", type=float, default=1.0, 
                         help="Maximum gradient norm for clipping")
@@ -62,11 +62,11 @@ def parse_args():
                         help="Rank for LoRA adapter")
     
     # Other parameters
-    parser.add_argument("--save_steps", type=int, default=1000, 
+    parser.add_argument("--save_steps", type=int, default=100, 
                         help="Save checkpoint every X steps")
-    parser.add_argument("--eval_steps", type=int, default=500, 
+    parser.add_argument("--eval_steps", type=int, default=100, 
                         help="Evaluate every X steps")
-    parser.add_argument("--log_steps", type=int, default=100, 
+    parser.add_argument("--log_steps", type=int, default=10, 
                         help="Log every X steps")
     parser.add_argument("--max_audio_length", type=int, default=30, 
                         help="Maximum audio length in seconds")
