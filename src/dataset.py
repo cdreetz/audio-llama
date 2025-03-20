@@ -16,7 +16,9 @@ class AudioLLMDataset(Dataset):
         max_audio_length=30,  # seconds
         sample_rate=16000,
         audio_padding="max_length",
-        text_max_length=512
+        text_max_length=512,
+        skip_missing_files=False,
+        use_dummy_audio_for_missing=True
     ):
         self.data = data_entries
         self.audio_dir = audio_dir
@@ -35,6 +37,13 @@ class AudioLLMDataset(Dataset):
                 "additional_special_tokens": [self.audio_start_token, self.audio_end_token]
             }
             llama_tokenizer.add_special_tokens(special_tokens)
+
+        self.skip_missing_files = skip_missing_files
+        self.use_dummy_audio_for_missing = use_dummy_audio_for_missing
+        self.missing_files = []
+
+        if self.skip_missing_files:
+            self._filter_missing_files()
         
     def __len__(self):
         return len(self.data)
@@ -79,12 +88,15 @@ class AudioLLMDataset(Dataset):
     
     def _process_audio(self, audio_path):
         try:
+            if not os.path.exists(audio_path):
+                raise FileNotFoundError(f"Audio file not found: {audio_path}")
             waveform, sample_rate = torchaudio.load(audio_path)
 
         except Exception as e:
             print(f"Error loading {audio_path}: {e}")
             # return a zero tensor with correct shape as fallback
             return torch.zeros((1, self.sample_rate * self.max_audio_length))
+            #return torch.zeros((1, 80, 3000))
         
         # Convert to mono if stereo
         if waveform.shape[0] > 1:
@@ -119,6 +131,32 @@ class AudioLLMDataset(Dataset):
             tokens[k] = v.squeeze(0)
             
         return tokens
+
+    def _filter_missing_files(self):
+        valid_entries = []
+
+        for item in self.data:
+            audio_path = item.get("audio_paths", "")
+            if not audio_path:
+                valid_entries.append(item)
+                continue
+            full_path = os.path.join(self.audio_dir, audio_path)
+
+            if not os.path.exists(full_path) and audio_path.startswith("audio/"):
+                fixed_path = audio_path[6:]
+                full_path = os.path.join(self.audio_dir, fixed_path)
+
+                if os.path.exists(full_path):
+                    item["audio_paths"] = fixed_path
+
+            if os.path.exists(full_path):
+                valid_entries.append(item)
+            else:
+                self.missing_files.append(audio_path)
+
+        print(f"Filtered out {len(self.data) - len(valid_entries)} entires with missing audio files")
+        self.data = valid_entries
+
 
 def collate_fn(batch):
     audio_features = torch.stack([item["audio_features"] for item in batch])

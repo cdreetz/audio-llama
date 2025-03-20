@@ -118,9 +118,22 @@ class AudioLLM(nn.Module):
         if audio_features is None:
             return text_embeddings
 
-        batch_size, channels, features, time = audio_features.shape
-        reshaped_audio = audio_features.squeeze(1).permute(0, 2, 1)
-        print(f"Reshaped audio features: {reshaped_audio.shape}")
+        if len(audio_features.shape) == 3:
+            batch_size, channels, time = audio_features.shape
+            features = 128
+            padded_time = ((time + features - 1) // features) * features
+            if padded_time != time:
+                pad_size = padded_time - time
+                audio_features = torch.nn.functional.pad(audio_features, (0, pad_size))
+                time = padded_time
+
+            reshaped_audio = audio_features.squeeze(1).reshape(batch_size, time // features, features)
+        elif len(audio_features.shape) == 4:
+            batch_size, channels, features, time = audio_features.shape
+            reshaped_audio = audio_features.squeeze(1).permute(0, 2, 1)
+            print(f"Reshaped audio features: {reshaped_audio.shape}")
+        else:
+            raise ValueError(f"Unexpected audio features shape: {audio_features.shape}")
 
         if time > 128:
             # option 1 take every nth frame

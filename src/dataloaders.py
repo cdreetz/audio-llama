@@ -17,7 +17,9 @@ def create_dataloaders(
     max_audio_length=30,
     text_max_length=512,
     num_workers=4,
-    seed=42
+    seed=42,
+    skip_missing_files=False,
+    use_dummy_audio_for_missing=True
 ):
     """
     create train and val dataloaders for AudioLLM training
@@ -58,7 +60,9 @@ def create_dataloaders(
         whisper_processor=whisper_processor,
         llama_tokenizer=llama_tokenizer,
         max_audio_length=max_audio_length,
-        text_max_length=text_max_length
+        text_max_length=text_max_length,
+        skip_missing_files=skip_missing_files,
+        use_dummy_audio_for_missing=use_dummy_audio_for_missing
     )
 
     val_dataset = AudioLLMDataset(
@@ -67,7 +71,9 @@ def create_dataloaders(
         whisper_processor=whisper_processor,
         llama_tokenizer=llama_tokenizer,
         max_audio_length=max_audio_length,
-        text_max_length=text_max_length
+        text_max_length=text_max_length,
+        skip_missing_files=skip_missing_files,
+        use_dummy_audio_for_missing=use_dummy_audio_for_missing
     )
     
     

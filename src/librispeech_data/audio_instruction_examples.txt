@@ -1,0 +1,451 @@
+EXAMPLE 1
+File: 2196-174172-0014
+Subset: train-clean-100
+Audio: audio/train-clean-100/2196/174172/2196-174172-0014.flac
+Text (instruction): What is the exact text being narrated in this audio?
+Response: The law of production the law of expression the law of beauty the law of selflessness keep your bodily forces up rebuild destroyed tissue keep the system free of waste
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 2
+File: 2277-149874-0018
+Subset: dev-clean
+Audio: audio/dev-clean/2277/149874/2277-149874-0018.flac
+Text (instruction): What is the exact text being narrated in this audio?
+Response: It was under such auspicious circumstances that she started out this morning to look for work
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 3
+File: 2893-139322-0008
+Subset: train-clean-100
+Audio: audio/train-clean-100/2893/139322/2893-139322-0008.flac
+Text (instruction): What is being said in this audio file?
+Response: But wherever there was work it was being done by slow moving workers in blue canvas the only people not in blue canvas were the overlookers of the work places and the orange clad labour police and fresh from the flushed faces of the dancing halls
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 4
+File: 374-180299-0046
+Subset: train-clean-100
+Audio: audio/train-clean-100/374/180299/374-180299-0046.flac
+Text (instruction): This is a segment from the LibriSpeech dataset. What is being said?
+Response: I feared above all that she might think me capable of shirking the responsibilities of every consequence to which her love for me might lead her it thus came about that the duke receiving no reply ceased to write
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 5
+File: 2182-181173-0018
+Subset: train-clean-100
+Audio: audio/train-clean-100/2182/181173/2182-181173-0018.flac
+Text (instruction): Convert this speech to text.
+Response: Gloom had settled upon mister hobbs he was much depressed in spirits when his young friend brought to him in triumph the parting gift of a gold watch and chain mister hobbs found it difficult to acknowledge it properly
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 6
+File: 8324-286683-0027
+Subset: train-clean-100
+Audio: audio/train-clean-100/8324/286683/8324-286683-0027.flac
+Text (instruction): This is a segment from the LibriSpeech dataset. What is being said?
+Response: Which was so and the older one answered back well you're not so good looking which was also true then part of the brothers and sisters
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 7
+File: 4680-16042-0022
+Subset: train-clean-100
+Audio: audio/train-clean-100/4680/16042/4680-16042-0022.flac
+Text (instruction): Please listen carefully and transcribe every word in this recording.
+Response: There is only just and unjust war until that day when the grand human agreement is concluded war that at least which is the effort of the future which is hastening on against the past which is lagging in the rear may be necessary
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 8
+File: 1502-122619-0006
+Subset: train-clean-100
+Audio: audio/train-clean-100/1502/122619/1502-122619-0006.flac
+Text (instruction): This is a segment from the LibriSpeech dataset. What is being said?
+Response: On that morning when magua led his silent party from the settlement of the beavers into the forests in the manner described the sun rose upon the delaware encampment as if it had suddenly burst upon a busy people
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 9
+File: 4195-17507-0021
+Subset: train-clean-100
+Audio: audio/train-clean-100/4195/17507/4195-17507-0021.flac
+Text (instruction): Please transcribe this audio recording.
+Response: Italy is beautiful it is charming and delightful but seldom is this true in winter or early spring the horses went along at a spanking pace that was astonishing they passed through the picturesque lanes of sorrento climbed
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 10
+File: 5694-64038-0015
+Subset: dev-clean
+Audio: audio/dev-clean/5694/64038/5694-64038-0015.flac
+Text (instruction): Please create a verbatim transcript of this audio recording.
+Response: We walked over this floating bridge and soon found ourselves on the tennessee side of tennessee river
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 11
+File: 652-129742-0006
+Subset: dev-clean
+Audio: audio/dev-clean/652/129742/652-129742-0006.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: Cauliflower mayonnaise take cold boiled cauliflower break into branches adding salt pepper and vinegar to season
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 12
+File: 1455-134435-0061
+Subset: train-clean-100
+Audio: audio/train-clean-100/1455/134435/1455-134435-0061.flac
+Text (instruction): Provide a transcription of this audio.
+Response: And again as on that night when he had run through the fields crying for a son he became excited to the edge of insanity
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 13
+File: 2136-5147-0040
+Subset: train-clean-100
+Audio: audio/train-clean-100/2136/5147/2136-5147-0040.flac
+Text (instruction): Convert this speech to text.
+Response: Madame uttered a slumbering moan and turned more upon her face clasping the coverlet faster about her madame it is maud and lady knollys we have come to relieve your ear pray let me see it
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 14
+File: 6563-63821-0031
+Subset: train-clean-100
+Audio: audio/train-clean-100/6563/63821/6563-63821-0031.flac
+Text (instruction): What is the exact text being narrated in this audio?
+Response: Loved to hear them tell their stories and as he listened the thought occurred to him one evening why should all this be forgotten boy as he was he began to write them down under the title of the unwritten history of the war in new jersey
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 15
+File: 3240-131231-0038
+Subset: train-clean-100
+Audio: audio/train-clean-100/3240/131231/3240-131231-0038.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: But there is some question of species i think myself that they were minnows and sticklebacks some persons thinking them to be sea fishes placed them in salt water according to mister roberts
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 16
+File: 6319-64726-0007
+Subset: dev-clean
+Audio: audio/dev-clean/6319/64726/6319-64726-0007.flac
+Text (instruction): Provide a transcription of this audio.
+Response: One said it was an enchanted castle another that witches lived there but most believed that it was occupied by a great ogre which carried thither all the children he could catch and ate them up one at a time for nobody could get at him through the wood
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 17
+File: 6081-42010-0012
+Subset: train-clean-100
+Audio: audio/train-clean-100/6081/42010/6081-42010-0012.flac
+Text (instruction): What text is being read aloud in this audio segment?
+Response: Just for one second and then she caught his withering glance and heard his words of menace terror stricken she staggered back and then lecoq seized her around the waist
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 18
+File: 6925-80680-0004
+Subset: train-clean-100
+Audio: audio/train-clean-100/6925/80680/6925-80680-0004.flac
+Text (instruction): What does the person say in this audio clip?
+Response: So the king called the two soldiers who were on guard outside and put the question to them but whilst the dispute was going on the king and queen had got so excited and talked so loud that the guards had heard nearly all they said and one man observed to the other
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 19
+File: 1578-140049-0009
+Subset: train-clean-100
+Audio: audio/train-clean-100/1578/140049/1578-140049-0009.flac
+Text (instruction): Please transcribe this audio recording.
+Response: This time it was a full set of furs for missus ladd and to think we can remember the time he was a barefoot boy without two shirts to his back it is strange he hasn't married with all his money and him so fond of children that he always has a pack of them at his heels
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 20
+File: 3830-12530-0036
+Subset: train-clean-100
+Audio: audio/train-clean-100/3830/12530/3830-12530-0036.flac
+Text (instruction): Listen to this audio clip and write down the spoken content word for word.
+Response: And the sweep of the wind to the north we had a view of thirty miles or more to where horizon and water blended leaving it doubtful whether land was in sight or not as we afterwards ascertained we could see the famous san juan island
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 21
+File: 1246-135815-0014
+Subset: train-clean-100
+Audio: audio/train-clean-100/1246/135815/1246-135815-0014.flac
+Text (instruction): What is being said in this audio file?
+Response: And there were two branch tunnels leading up to the surface of the ground making side or back doorways there was no sand around either of these and they were quite hidden by the long grass hanging over them
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 22
+File: 1919-142785-0000
+Subset: dev-clean
+Audio: audio/dev-clean/1919/142785/1919-142785-0000.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: Illustration long pepper
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 23
+File: 1183-133256-0013
+Subset: train-clean-100
+Audio: audio/train-clean-100/1183/133256/1183-133256-0013.flac
+Text (instruction): Transcribe this audio sample with proper capitalization and punctuation.
+Response: Not so it is only a run down condition of the roots of the hair just as the body gets run down but you should not permit this it is not necessary and this needless look of age impairs your usefulness and popularity in society and business golden rule hair restorative simply invigorates the roots
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 24
+File: 4195-186237-0014
+Subset: train-clean-100
+Audio: audio/train-clean-100/4195/186237/4195-186237-0014.flac
+Text (instruction): Provide a transcription of this audio.
+Response: It's no palace said patsy entering to throw down the bundles as soon as the major unlocked the door but there's a cricket in the hearth and it's your home uncle john as well as ours uncle john looked around curiously
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 25
+File: 4088-158077-0084
+Subset: train-clean-100
+Audio: audio/train-clean-100/4088/158077/4088-158077-0084.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: They too were dismissed and their cases never tried
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 26
+File: 1246-124548-0051
+Subset: train-clean-100
+Audio: audio/train-clean-100/1246/124548/1246-124548-0051.flac
+Text (instruction): Please listen carefully and transcribe every word in this recording.
+Response: The town shabby and egomaniac she could not endure she could nurse champ perry and warm to the neighborliness of sam clark but she could not sit applauding honest jim blausser
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 27
+File: 5456-62043-0036
+Subset: train-clean-100
+Audio: audio/train-clean-100/5456/62043/5456-62043-0036.flac
+Text (instruction): Provide a transcription of this audio.
+Response: Out crept from the cottage the veritable faded hat copperas colored pants yellow countenance and two weeks beard we had seen the night before
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 28
+File: 103-1241-0009
+Subset: train-clean-100
+Audio: audio/train-clean-100/103/1241/103-1241-0009.flac
+Text (instruction): Transcribe this audio sample with proper capitalization and punctuation.
+Response: She's a case i should say i'm not expecting a girl said matthew blankly it's a boy i've come for he should be here missus alexander spencer was to bring him over from nova scotia for me the stationmaster whistled
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 29
+File: 831-130746-0012
+Subset: train-clean-100
+Audio: audio/train-clean-100/831/130746/831-130746-0012.flac
+Text (instruction): Provide a transcription of this audio.
+Response: An other gentlemen who another gentleman in brown sir went into the yard sir got out the two bicycles sir and went off sir about twenty minutes ago bechamel stood with his eyes round and his knuckle on his hips
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 30
+File: 4680-16042-0017
+Subset: train-clean-100
+Audio: audio/train-clean-100/4680/16042/4680-16042-0017.flac
+Text (instruction): What is being said in this audio file?
+Response: Who were a mere handful against an army should he be untrue at once to his love to country to his word should he give to his cowardice the pretext of patriotism but this was impossible and if the phantom of his father was there in the gloom
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 31
+File: 1455-138263-0009
+Subset: train-clean-100
+Audio: audio/train-clean-100/1455/138263/1455-138263-0009.flac
+Text (instruction): Listen to this audio clip and write down the spoken content word for word.
+Response: Indeed said barbicane indeed continued michel it is enough to say
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 32
+File: 7178-34645-0011
+Subset: train-clean-100
+Audio: audio/train-clean-100/7178/34645/7178-34645-0011.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: To those who have studied pathologically the cases of caprice called our good will and pleasure
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 33
+File: 4051-11217-0040
+Subset: train-clean-100
+Audio: audio/train-clean-100/4051/11217/4051-11217-0040.flac
+Text (instruction): What text is being read aloud in this audio segment?
+Response: One other stride did bold jason make and suddenly as a streak of lightning on came these fiery animals
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 34
+File: 4297-13006-0010
+Subset: train-clean-100
+Audio: audio/train-clean-100/4297/13006/4297-13006-0010.flac
+Text (instruction): What does the person say in this audio clip?
+Response: Which strangers did not find on her face but as we do not light up our houses with our brightest lamps for all comers so neither did she emit from her eyes their brightest sparks till special occasion for such shining had arisen
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 35
+File: 5652-19215-0044
+Subset: train-clean-100
+Audio: audio/train-clean-100/5652/19215/5652-19215-0044.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: Only moderately concealed oh the large laughing mouths and how gay we were in those days youth was a bouquet
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 36
+File: 2911-7601-0029
+Subset: train-clean-100
+Audio: audio/train-clean-100/2911/7601/2911-7601-0029.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: But even yet i refrained and kept still i scarcely breathed i held the lantern motionless i tried how steadily i could maintain the ray
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 37
+File: 5683-32879-0019
+Subset: test-clean
+Audio: audio/test-clean/5683/32879/5683-32879-0019.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: I have very few to love me now and i thought you might love me as i have begun to love you
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 38
+File: 1992-141719-0033
+Subset: train-clean-100
+Audio: audio/train-clean-100/1992/141719/1992-141719-0033.flac
+Text (instruction): Please listen carefully and transcribe every word in this recording.
+Response: He got artfully behind him and shooting with a spring on his horses buttocks grasp'd him close threw him headlong on the sand then jump'd into his seat and wheel'd round prince hottam while he lay sprawling on the ground all the spectators in general
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 39
+File: 332-128985-0064
+Subset: train-clean-100
+Audio: audio/train-clean-100/332/128985/332-128985-0064.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: How to shoot fish with bow and arrows and on this voyage across the atlantic he occupied all his spare time in sitting in the rigging and shooting the fish which disported themselves about the vessel
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 40
+File: 7505-83618-0008
+Subset: train-clean-100
+Audio: audio/train-clean-100/7505/83618/7505-83618-0008.flac
+Text (instruction): What words were spoken in this recording?
+Response: Light and life were to him synonymous therefore all religions promise to lead from night to light from night to heavenly light therefore he who rescues is ever the light of the world
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 41
+File: 3570-5695-0004
+Subset: test-clean
+Audio: audio/test-clean/3570/5695/3570-5695-0004.flac
+Text (instruction): Convert this speech to text.
+Response: If beauty or comfort is achieved and it is a more or less fortuitous circumstance if they are they must be achieved by means and methods that commend themselves to the great economic law of wasted effort
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 42
+File: 40-121026-0005
+Subset: train-clean-100
+Audio: audio/train-clean-100/40/121026/40-121026-0005.flac
+Text (instruction): What does the person say in this audio clip?
+Response: Than if i possessed a watch for that might be broken or deranged in its movements while the sun and earth never vary in their appointed paths this last explanation was wholly lost upon dantes who had always imagined
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 43
+File: 4898-20016-0010
+Subset: train-clean-100
+Audio: audio/train-clean-100/4898/20016/4898-20016-0010.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: And looked into the church through a little window at one side of the pulpit for this he started but he did not fail to run across the square and leap over the church gate at the top of his speed
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 44
+File: 2989-138035-0014
+Subset: train-clean-100
+Audio: audio/train-clean-100/2989/138035/2989-138035-0014.flac
+Text (instruction): What does the person say in this audio clip?
+Response: Bowls over the nine pins as if by magic
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 45
+File: 61-70970-0033
+Subset: test-clean
+Audio: audio/test-clean/61/70970/61-70970-0033.flac
+Text (instruction): This is a segment from the LibriSpeech dataset. What is being said?
+Response: Truly such a horse should be worth much in nottingham fair
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 46
+File: 260-123286-0023
+Subset: test-clean
+Audio: audio/test-clean/260/123286/260-123286-0023.flac
+Text (instruction): What is being said in this audio file?
+Response: The raft was heaved up on a watery mountain and pitched down again at a distance of twenty fathoms
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 47
+File: 7278-104730-0038
+Subset: train-clean-100
+Audio: audio/train-clean-100/7278/104730/7278-104730-0038.flac
+Text (instruction): Transcribe this audio sample with proper capitalization and punctuation.
+Response: February fourteenth in the same year was a field day in the petition campaign he presented then no less than three hundred and fifty petitions all but three or four of which bore more or less
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 48
+File: 8797-294123-0052
+Subset: train-clean-100
+Audio: audio/train-clean-100/8797/294123/8797-294123-0052.flac
+Text (instruction): Listen to this audio clip and write down the spoken content word for word.
+Response: Long ago one borrowed the other's written language and long before that untold generations ago they diverged from a common root the ancient mongol stock there have been changes
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 49
+File: 5639-40744-0037
+Subset: test-clean
+Audio: audio/test-clean/5639/40744/5639-40744-0037.flac
+Text (instruction): What does the person say in this audio clip?
+Response: Know then son of my heart that this fainting lady is your real bride i say real because she is the one whom your father and i have chosen for you and the portrait was a pretence
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 50
+File: 6563-285357-0014
+Subset: train-clean-100
+Audio: audio/train-clean-100/6563/285357/6563-285357-0014.flac
+Text (instruction): What words were spoken in this recording?
+Response: And could cover four hundred fifty miles within this period the government would repay the whole of the money he had lavished upon his idea and liquidate all the debts he had incurred in connection therewith another craft was built larger than its predecessors
+
+--------------------------------------------------------------------------------
+
+... and 950 more examples (not shown for brevity)

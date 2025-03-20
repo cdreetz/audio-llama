@@ -1,0 +1,23 @@
+DATASET STATISTICS
+Total examples: 1000
+Total words: 32371
+Average words per example: 32.4
+
+SUBSET DISTRIBUTION:
+  - train-clean-100: 848 examples (84.8%)
+  - test-clean: 80 examples (8.0%)
+  - dev-clean: 72 examples (7.2%)
+
+SPEAKER DISTRIBUTION:
+  Total unique speakers: 312
+  Top 10 speakers:
+    - Speaker 4014: 11 examples (1.1%)
+    - Speaker 1246: 10 examples (1.0%)
+    - Speaker 7178: 10 examples (1.0%)
+    - Speaker 2989: 10 examples (1.0%)
+    - Speaker 374: 8 examples (0.8%)
+    - Speaker 2911: 8 examples (0.8%)
+    - Speaker 6454: 8 examples (0.8%)
+    - Speaker 3112: 8 examples (0.8%)
+    - Speaker 1594: 8 examples (0.8%)
+    - Speaker 4195: 7 examples (0.7%)

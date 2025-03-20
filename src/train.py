@@ -62,9 +62,9 @@ def parse_args():
                         help="Rank for LoRA adapter")
     
     # Other parameters
-    parser.add_argument("--save_steps", type=int, default=100, 
+    parser.add_argument("--save_steps", type=int, default=50, 
                         help="Save checkpoint every X steps")
-    parser.add_argument("--eval_steps", type=int, default=100, 
+    parser.add_argument("--eval_steps", type=int, default=50, 
                         help="Evaluate every X steps")
     parser.add_argument("--log_steps", type=int, default=10, 
                         help="Log every X steps")
@@ -82,6 +82,10 @@ def parse_args():
                         help="Use mixed precision training")
     parser.add_argument("--num_workers", type=int, default=4, 
                         help="Number of workers for data loading")
+    parser.add_argument("--skip_missing_files", action="store_true",
+                    help="Skip examples with missing audio files")
+    parser.add_argument("--use_dummy_audio", action="store_true",
+                    help="Use zero tensors for missing audio files")
     
     return parser.parse_args()
 
@@ -189,7 +193,9 @@ def train(args):
         max_audio_length=args.max_audio_length,
         text_max_length=args.text_max_length,
         num_workers=args.num_workers,
-        seed=args.seed
+        seed=args.seed,
+        skip_missing_files=args.skip_missing_files,
+        use_dummy_audio_for_missing=args.use_dummy_audio
     )
     
     # Initialize model

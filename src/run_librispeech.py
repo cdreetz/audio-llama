@@ -88,7 +88,7 @@ def main():
     if not args.download_only:
         print("\n===== GENERATING INSTRUCTION EXAMPLES =====")
         process_cmd = [
-            "python", "librispeech_processor6.py",
+            "python", "librispeech_processor7.py",
             "--metadata-path", metadata_path,
             "--output-path", examples_path,
             "--subsets"] + subsets
