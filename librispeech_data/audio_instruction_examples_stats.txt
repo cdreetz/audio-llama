@@ -1,0 +1,21 @@
+DATASET STATISTICS
+Total examples: 1000
+Total words: 19281
+Average words per example: 19.3
+
+SUBSET DISTRIBUTION:
+  - test-clean: 1000 examples (100.0%)
+
+SPEAKER DISTRIBUTION:
+  Total unique speakers: 40
+  Top 10 speakers:
+    - Speaker 5142: 41 examples (4.1%)
+    - Speaker 1580: 40 examples (4.0%)
+    - Speaker 4446: 39 examples (3.9%)
+    - Speaker 61: 37 examples (3.7%)
+    - Speaker 6829: 36 examples (3.6%)
+    - Speaker 6930: 34 examples (3.4%)
+    - Speaker 8463: 33 examples (3.3%)
+    - Speaker 5683: 33 examples (3.3%)
+    - Speaker 8455: 31 examples (3.1%)
+    - Speaker 2830: 31 examples (3.1%)

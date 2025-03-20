@@ -1,0 +1,451 @@
+EXAMPLE 1
+File: 3570-5695-0014
+Subset: test-clean
+Audio: audio/test-clean/3570/5695/3570-5695-0014.flac
+Text (instruction): I need a precise transcription of this speech sample. What is said?
+Response: Among the country population its place is to some extent taken by savings and home comforts known through the medium of neighborhood gossip sufficiently to serve the like general purpose of pecuniary repute
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 2
+File: 8463-294825-0002
+Subset: test-clean
+Audio: audio/test-clean/8463/294825/8463-294825-0002.flac
+Text (instruction): Provide a detailed transcription of the speech in this audio file.
+Response: First as a paris stockbroker later as a celebrated author and yachtsman he went on frequent voyages to britain america the mediterranean
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 3
+File: 61-70968-0004
+Subset: test-clean
+Audio: audio/test-clean/61/70968/61-70968-0004.flac
+Text (instruction): Transcribe the spoken content of this recording.
+Response: Also there was a stripling page who turned into a maid
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 4
+File: 1284-1181-0013
+Subset: test-clean
+Audio: audio/test-clean/1284/1181/1284-1181-0013.flac
+Text (instruction): Please create a verbatim transcript of this audio recording.
+Response: Ojo became a bit uneasy at this for he had already put quite a lot of the cleverness powder in the dish but he dared not interfere and so he comforted himself with the thought that one cannot have too much cleverness
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 5
+File: 5683-32865-0000
+Subset: test-clean
+Audio: audio/test-clean/5683/32865/5683-32865-0000.flac
+Text (instruction): Please listen carefully and transcribe every word in this recording.
+Response: You know captain lake
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 6
+File: 4507-16021-0014
+Subset: test-clean
+Audio: audio/test-clean/4507/16021/4507-16021-0014.flac
+Text (instruction): Please transcribe this audio recording.
+Response: Now when has horror ever excluded study
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 7
+File: 1320-122612-0012
+Subset: test-clean
+Audio: audio/test-clean/1320/122612/1320-122612-0012.flac
+Text (instruction): What is the exact text being narrated in this audio?
+Response: Extinguished brands were lying around a spring the offals of a deer were scattered about the place and the trees bore evident marks of having been browsed by the horses
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 8
+File: 8455-210777-0056
+Subset: test-clean
+Audio: audio/test-clean/8455/210777/8455-210777-0056.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: The peculiar circumstances of the colony are within your excellency's knowledge
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 9
+File: 2094-142345-0043
+Subset: test-clean
+Audio: audio/test-clean/2094/142345/2094-142345-0043.flac
+Text (instruction): Listen to this audio clip and write down the spoken content word for word.
+Response: By this time the two gentlemen had reached the palings and had got down from their horses it was plain they meant to come in
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 10
+File: 672-122797-0060
+Subset: test-clean
+Audio: audio/test-clean/672/122797/672-122797-0060.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: It is a very stupid story
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 11
+File: 2830-3980-0045
+Subset: test-clean
+Audio: audio/test-clean/2830/3980/2830-3980-0045.flac
+Text (instruction): Listen to this audio clip and write down the spoken content word for word.
+Response: Men should not speculate about the nature of god
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 12
+File: 5142-33396-0022
+Subset: test-clean
+Audio: audio/test-clean/5142/33396/5142-33396-0022.flac
+Text (instruction): Convert this speech to text.
+Response: What of the farm olaf not yet i answered viking is better for summer
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 13
+File: 5639-40744-0010
+Subset: test-clean
+Audio: audio/test-clean/5639/40744/5639-40744-0010.flac
+Text (instruction): Please create a verbatim transcript of this audio recording.
+Response: It is the only amends i ask of you for the wrong you have done me
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 14
+File: 5639-40744-0013
+Subset: test-clean
+Audio: audio/test-clean/5639/40744/5639-40744-0013.flac
+Text (instruction): I'm collecting transcripts of spoken text. What does the speaker say here?
+Response: She saw that the bed was gilded and so rich that it seemed that of a prince rather than of a private gentleman
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 15
+File: 8455-210777-0048
+Subset: test-clean
+Audio: audio/test-clean/8455/210777/8455-210777-0048.flac
+Text (instruction): What does the person say in this audio clip?
+Response: What would become of your gun were i to kidnap you
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 16
+File: 3575-170457-0016
+Subset: test-clean
+Audio: audio/test-clean/3575/170457/3575-170457-0016.flac
+Text (instruction): Please listen carefully and transcribe every word in this recording.
+Response: Farewell madam
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 17
+File: 4507-16021-0021
+Subset: test-clean
+Audio: audio/test-clean/4507/16021/4507-16021-0021.flac
+Text (instruction): What is the exact text being narrated in this audio?
+Response: The painter who says my grinder the notary who says my skip the gutter the hairdresser who says my mealyback the cobbler who says my cub talks slang
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 18
+File: 4077-13751-0009
+Subset: test-clean
+Audio: audio/test-clean/4077/13751/4077-13751-0009.flac
+Text (instruction): I need a precise transcription of this speech sample. What is said?
+Response: The first well established seat of the church was in the pretty little town of kirtland ohio almost within sight of lake erie and here soon rose the first temple of modern times
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 19
+File: 3729-6852-0045
+Subset: test-clean
+Audio: audio/test-clean/3729/6852/3729-6852-0045.flac
+Text (instruction): Please transcribe this audio recording.
+Response: He had a good appetite could tell a good story without laughing was celebrated for his witty repartees and his sociable manners but he spent his life at home seldom going out and seeing hardly anyone because he always had a pipe in his mouth and was surrounded by at least twenty cats with which he would amuse himself all day
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 20
+File: 5639-40744-0022
+Subset: test-clean
+Audio: audio/test-clean/5639/40744/5639-40744-0022.flac
+Text (instruction): Provide a transcription of this audio.
+Response: Time rolled on the hour of her delivery arrived it took place in the utmost secrecy her mother taking upon her the office of midwife and she gave birth to a son one of the most beautiful ever seen
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 21
+File: 7176-92135-0003
+Subset: test-clean
+Audio: audio/test-clean/7176/92135/7176-92135-0003.flac
+Text (instruction): I'm collecting transcripts of spoken text. What does the speaker say here?
+Response: Your play must be not merely a good play but a successful one
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 22
+File: 1995-1836-0005
+Subset: test-clean
+Audio: audio/test-clean/1995/1836/1995-1836-0005.flac
+Text (instruction): This is a segment from the LibriSpeech dataset. What is being said?
+Response: Missus grey had met southerners before but not intimately and she always had in mind vividly their cruelty to poor negroes a subject she made a point of introducing forthwith
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 23
+File: 2094-142345-0034
+Subset: test-clean
+Audio: audio/test-clean/2094/142345/2094-142345-0034.flac
+Text (instruction): What text is being read aloud in this audio segment?
+Response: And there's linen in the house as i could well spare you for i've got lots o sheeting and table clothing and towelling as isn't made up
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 24
+File: 5142-33396-0048
+Subset: test-clean
+Audio: audio/test-clean/5142/33396/5142-33396-0048.flac
+Text (instruction): Provide a detailed transcription of the speech in this audio file.
+Response: By the hammer of thor shouted grim here is no stingy coward
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 25
+File: 3575-170457-0037
+Subset: test-clean
+Audio: audio/test-clean/3575/170457/3575-170457-0037.flac
+Text (instruction): What is the exact text being narrated in this audio?
+Response: If christian perfection be necessary to salvation i shall never be saved my heart is a very hotbed for sinful thoughts and when i decide on an action i scarcely remember to look to my redeemer for direction
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 26
+File: 4446-2275-0024
+Subset: test-clean
+Audio: audio/test-clean/4446/2275/4446-2275-0024.flac
+Text (instruction): Please transcribe this audio recording.
+Response: She pressed his hand gently in gratitude
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 27
+File: 2830-3980-0011
+Subset: test-clean
+Audio: audio/test-clean/2830/3980/2830-3980-0011.flac
+Text (instruction): Provide a transcription of this audio.
+Response: Paul declares that the false apostles were called or sent neither by men nor by man
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 28
+File: 1284-1181-0016
+Subset: test-clean
+Audio: audio/test-clean/1284/1181/1284-1181-0016.flac
+Text (instruction): Please put into text what is spoken in this audio.
+Response: I am not allowed to perform magic except for my own amusement he told his visitors as he lighted a pipe with a crooked stem and began to smoke
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 29
+File: 61-70970-0008
+Subset: test-clean
+Audio: audio/test-clean/61/70970/61-70970-0008.flac
+Text (instruction): Please listen carefully and transcribe every word in this recording.
+Response: Now to bed boy
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 30
+File: 6930-75918-0015
+Subset: test-clean
+Audio: audio/test-clean/6930/75918/6930-75918-0015.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: Thus it is that the honor of three is saved our country's our master's and our own
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 31
+File: 5142-33396-0018
+Subset: test-clean
+Audio: audio/test-clean/5142/33396/5142-33396-0018.flac
+Text (instruction): Transcribe the spoken content of this recording.
+Response: My dragon's belly is never full and on board went the gold
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 32
+File: 4970-29095-0006
+Subset: test-clean
+Audio: audio/test-clean/4970/29095/4970-29095-0006.flac
+Text (instruction): What is the exact text being narrated in this audio?
+Response: Is thy father willing thee should go away to a school of the world's people
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 33
+File: 1284-1181-0000
+Subset: test-clean
+Audio: audio/test-clean/1284/1181/1284-1181-0000.flac
+Text (instruction): Provide a detailed transcription of the speech in this audio file.
+Response: Ojo examined this curious contrivance with wonder
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 34
+File: 6930-81414-0026
+Subset: test-clean
+Audio: audio/test-clean/6930/81414/6930-81414-0026.flac
+Text (instruction): Convert this speech to text.
+Response: My overwrought nerves yielded at last
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 35
+File: 3575-170457-0010
+Subset: test-clean
+Audio: audio/test-clean/3575/170457/3575-170457-0010.flac
+Text (instruction): What does the person say in this audio clip?
+Response: I am not depreciating it when i say that in these times it is not rare
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 36
+File: 4970-29093-0015
+Subset: test-clean
+Audio: audio/test-clean/4970/29093/4970-29093-0015.flac
+Text (instruction): What text is being read aloud in this audio segment?
+Response: You can begin by carrying a rod and putting down the figures
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 37
+File: 8455-210777-0001
+Subset: test-clean
+Audio: audio/test-clean/8455/210777/8455-210777-0001.flac
+Text (instruction): What is being said in this audio file?
+Response: Had eva crasweller not been good looking had jack been still at college had sir kennington oval remained in england had mister bunnit and the bar keeper not succeeded in stopping my carriage on the hill should i have succeeded in arranging for the final departure of my old friend
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 38
+File: 8455-210777-0024
+Subset: test-clean
+Audio: audio/test-clean/8455/210777/8455-210777-0024.flac
+Text (instruction): What words were spoken in this recording?
+Response: How much of evil of real accomplished evil had there not occurred to me during the last few days
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 39
+File: 1580-141084-0016
+Subset: test-clean
+Audio: audio/test-clean/1580/141084/1580-141084-0016.flac
+Text (instruction): Transcribe the spoken content of this recording.
+Response: My friend did not appear to be depressed by his failure but shrugged his shoulders in half humorous resignation
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 40
+File: 8455-210777-0002
+Subset: test-clean
+Audio: audio/test-clean/8455/210777/8455-210777-0002.flac
+Text (instruction): Please listen carefully and transcribe every word in this recording.
+Response: On arriving at home at my own residence i found that our salon was filled with a brilliant company
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 41
+File: 7021-79740-0003
+Subset: test-clean
+Audio: audio/test-clean/7021/79740/7021-79740-0003.flac
+Text (instruction): What does the person say in this audio clip?
+Response: To give an idea of these conversations i will report one of them in full
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 42
+File: 4970-29095-0033
+Subset: test-clean
+Audio: audio/test-clean/4970/29095/4970-29095-0033.flac
+Text (instruction): Please listen carefully and transcribe every word in this recording.
+Response: What a box women are put into measured for it and put in young if we go anywhere it's in a box veiled and pinioned and shut in by disabilities
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 43
+File: 3729-6852-0009
+Subset: test-clean
+Audio: audio/test-clean/3729/6852/3729-6852-0009.flac
+Text (instruction): I need a precise transcription of this speech sample. What is said?
+Response: You will forgive me dear reader if i have made you attend the funeral of silvia ten years before her death believe me i have no intention of performing a miracle you may console yourself with the idea that i shall spare you that unpleasant task when poor silvia dies
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 44
+File: 7127-75947-0038
+Subset: test-clean
+Audio: audio/test-clean/7127/75947/7127-75947-0038.flac
+Text (instruction): Can you tell me what was said in this audio?
+Response: Let us run then said all three and gracefully lifting up the long skirts of their silk dresses they lightly ran across the open space between the lake and the thickest covert of the park
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 45
+File: 6829-68769-0029
+Subset: test-clean
+Audio: audio/test-clean/6829/68769/6829-68769-0029.flac
+Text (instruction): What is being said in this audio file?
+Response: It's a stock company and rich
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 46
+File: 4446-2273-0029
+Subset: test-clean
+Audio: audio/test-clean/4446/2273/4446-2273-0029.flac
+Text (instruction): Convert this speech to text.
+Response: It's really too warm in this room to sing don't you feel it
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 47
+File: 2094-142345-0031
+Subset: test-clean
+Audio: audio/test-clean/2094/142345/2094-142345-0031.flac
+Text (instruction): What is the exact text being narrated in this audio?
+Response: And she was very fond of you too aunt rachel
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 48
+File: 8463-294828-0021
+Subset: test-clean
+Audio: audio/test-clean/8463/294828/8463-294828-0021.flac
+Text (instruction): Convert this speech to text.
+Response: A route slightly less direct that's all
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 49
+File: 1580-141084-0040
+Subset: test-clean
+Audio: audio/test-clean/1580/141084/1580-141084-0040.flac
+Text (instruction): Write down what you hear in this audio clip.
+Response: He returned carrying his jumping shoes which are provided as you are aware with several sharp spikes
+
+--------------------------------------------------------------------------------
+
+EXAMPLE 50
+File: 672-122797-0072
+Subset: test-clean
+Audio: audio/test-clean/672/122797/672-122797-0072.flac
+Text (instruction): Provide a detailed transcription of the speech in this audio file.
+Response: And the gardener's boy chopped the tree into small pieces there was a whole heap lying there
+
+--------------------------------------------------------------------------------
+
+... and 950 more examples (not shown for brevity)
