@@ -9,7 +9,7 @@ class AudioLLM(nn.Module):
     def __init__(self, llama_path, whisper_path, lora_rank=320):
         super().__init__()
         
-        # Load base models
+        # load base models
         self.llama, self.whisper_encoder = load_base_models(llama_path, whisper_path)
         
         # Create projector (from Whisper dim to LLaMA dim)
@@ -20,10 +20,10 @@ class AudioLLM(nn.Module):
 
         self.projector = AudioProjector(features_dim, llama_dim)
         
-        # Apply LoRA to LLaMA
+        # apply LoRA to LLaMA
         self.lora_layers = apply_lora_to_llama(self.llama.model, rank=lora_rank)
         
-        # Register forward hooks to apply LoRA
+        # register forward hooks to apply LoRA
         self.hooks = []
         for name, module in self.llama.model.named_modules():
             if name in self.lora_layers:
@@ -36,6 +36,14 @@ class AudioLLM(nn.Module):
         self.audio_end_token = "</audio>"
 
         self.tokenizer = None
+
+        # temporal subsampling convs
+        self.conv1 = nn.Conv1d(128, 512, kernel_size=3, stride=2, padding=1)
+        self.conv2 = nn.Conv1d(512, 512, kernel_size=3, stride=2, padding=1)
+        self.conv3 = nn.Conv1d(512, 128, kernel_size=3, stride=2, padding=1)
+        self.relu = nn.ReLU()
+
+
     
     def forward(self, input_ids=None, attention_mask=None, audio_features=None, labels=None, **kwargs):
         """
@@ -118,35 +126,8 @@ class AudioLLM(nn.Module):
         if audio_features is None:
             return text_embeddings
 
-        if len(audio_features.shape) == 3:
-            batch_size, channels, time = audio_features.shape
-            features = 128
-            padded_time = ((time + features - 1) // features) * features
-            if padded_time != time:
-                pad_size = padded_time - time
-                audio_features = torch.nn.functional.pad(audio_features, (0, pad_size))
-                time = padded_time
-
-            reshaped_audio = audio_features.squeeze(1).reshape(batch_size, time // features, features)
-        elif len(audio_features.shape) == 4:
-            batch_size, channels, features, time = audio_features.shape
-            reshaped_audio = audio_features.squeeze(1).permute(0, 2, 1)
-            print(f"Reshaped audio features: {reshaped_audio.shape}")
-        else:
-            raise ValueError(f"Unexpected audio features shape: {audio_features.shape}")
-
-        if time > 128:
-            # option 1 take every nth frame
-            # option 2 use adaptive pooling
-            pool = nn.AdaptiveAvgPool1d(128)
-            downsampled_audio = pool(reshaped_audio.transpose(1, 2)).transpose(1, 2)
-            print(f"Downsampled audio features from {reshaped_audio.shape} to {downsampled_audio.shape}")
-            reshaped_audio = downsampled_audio
-
-
-
-        # process audio features through projector
-        projected_audio = self.projector(reshaped_audio)
+        processed_audio = self._process_audio_features(audio_features)
+        projected_audio = self.projector(processed_audio)
 
         # add audio start/end token embeddings
         audio_start_id = self.tokenizer.convert_tokens_to_ids(self.audio_start_token)
@@ -167,22 +148,10 @@ class AudioLLM(nn.Module):
         audio_start_embedding = self.llama.model.model.embed_tokens(audio_start_tokens)
         audio_end_embedding = self.llama.model.model.embed_tokens(audio_end_tokens)
 
-
-        print(f"audio_start_embedding shape: {audio_start_embedding.shape}")
-        print(f"projected_audio shape: {projected_audio.shape}")
-        print(f"audio_end_embedding shape: {audio_end_embedding.shape}")
-        print(f"text_embedding shape: {text_embeddings.shape}")
-
         audio_start_embedding = audio_start_embedding.to(device)
         projected_audio = projected_audio.to(device)
         audio_end_embedding = audio_end_embedding.to(device)
         text_embeddings = text_embeddings.to(device)
-
-        print(f"audio_start_embedding device: {audio_start_embedding.device}")
-        print(f"projected_audio device: {projected_audio.device}")
-        print(f"audio_end_embedding device: {audio_end_embedding.device}")
-        print(f"text_embedding device: {text_embeddings.device}")
-
 
         # concatenate: <audio> + audio_embeddings + </audio> + text_embeddings
         #combined_embeddings = torch.cat([
@@ -192,7 +161,13 @@ class AudioLLM(nn.Module):
         #    text_embeddings
         #], dim=1)
 
-        combined_embeddings = torch.cat([projected_audio, text_embeddings], dim=1)
+        #combined_embeddings = torch.cat([projected_audio, text_embeddings], dim=1)
+        combined_embeddings = torch.cat([
+            audio_start_embedding,
+            projected_audio,
+            audio_end_embedding,
+            text_embeddings
+        ], dim=1)
 
         print(f"Final combined shape: {combined_embeddings.shape}")
 
@@ -219,6 +194,43 @@ class AudioLLM(nn.Module):
         extended_mask = torch.cat([audio_attention, attention_mask], dim=1)
 
         return extended_mask
+
+    def _process_audio_features(self, audio_features):
+        """
+        process audio features with proper temporal subsampling.
+        reduces temporal dimension by 8x
+
+        Args:
+            audio_features: [batch_size, channels, features, time]
+
+        Returns:
+            process_features: [batch_size, time/8, features]
+        """
+        device = audio_features.device
+
+        self.conv1 = self.conv1.to(device)
+        self.conv2 = self.conv2.to(device)
+        self.conv3 = self.conv3.to(device)
+
+        if len(audio_features.shape) == 3:
+            batch_size, channels, time = audio_features.shape
+            x = audio_features.view(batch_size, channels, -1, time // channels)
+            x = x.squeeze(1).permute(0, 2, 1)
+        elif len(audio_features.shape) == 4:
+            batch_size, channels, features, time = audio_features.shape
+            x = audio_features.squeeze(1).permute(0, 2, 1)
+        else:
+            raise ValueError(f"Unexpected audio features shape: {audio_features.shape}")
+
+
+        # apply convolutions (need to switch dimension for conv1d)
+        x = x.transpose(1, 2) # [batch, features, time]
+        x = self.relu(self.conv1(x))
+        x = self.relu(self.conv2(x))
+        x = self.relu(self.conv3(x))
+        x = x.transpose(1, 2) # [batch, time/8, features]
+
+        return x
 
     
     def get_trainable_params(self):
