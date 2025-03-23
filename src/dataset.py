@@ -94,9 +94,7 @@ class AudioLLMDataset(Dataset):
 
         except Exception as e:
             print(f"Error loading {audio_path}: {e}")
-            # return a zero tensor with correct shape as fallback
-            return torch.zeros((1, self.sample_rate * self.max_audio_length))
-            #return torch.zeros((1, 80, 3000))
+            return torch.zeros((1, 80, 1000))
         
         # Convert to mono if stereo
         if waveform.shape[0] > 1:
@@ -108,15 +106,28 @@ class AudioLLMDataset(Dataset):
                 orig_freq=sample_rate, new_freq=self.sample_rate
             )
             waveform = resampler(waveform)
+
+        mel_spectogram = torchaudio.transforms.MelSpectrogram(
+            sample_rate=self.sample_rate,
+            n_fft=400,
+            hop_length=160,
+            n_mels=80,
+            power=2.0
+        )(waveform)
+
+        log_mel = torch.log(mel_spectrogram + 1e-9)
+
         
         # audio to Whisper features
-        input_features = self.whisper_processor(
-            waveform.squeeze().numpy(),
-            sampling_rate=self.sample_rate,
-            return_tensors="pt"
-        ).input_features
+        #input_features = self.whisper_processor(
+        #    waveform.squeeze().numpy(),
+        #    sampling_rate=self.sample_rate,
+        #    return_tensors="pt"
+        #).input_features
         
-        return input_features
+        # output shape [1, 80, time_frames]
+        return log_mel
+
     
     def _process_text(self, text):
         tokens = self.llama_tokenizer(

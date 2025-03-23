@@ -38,7 +38,7 @@ class AudioLLM(nn.Module):
         self.tokenizer = None
 
         # temporal subsampling convs
-        self.conv1 = nn.Conv1d(128, 512, kernel_size=3, stride=2, padding=1)
+        self.conv1 = nn.Conv1d(80, 512, kernel_size=3, stride=2, padding=1)
         self.conv2 = nn.Conv1d(512, 512, kernel_size=3, stride=2, padding=1)
         self.conv3 = nn.Conv1d(512, 128, kernel_size=3, stride=2, padding=1)
         self.relu = nn.ReLU()
@@ -213,18 +213,26 @@ class AudioLLM(nn.Module):
         self.conv3 = self.conv3.to(device)
 
         if len(audio_features.shape) == 3:
-            batch_size, channels, time = audio_features.shape
-            x = audio_features.view(batch_size, channels, -1, time // channels)
-            x = x.squeeze(1).permute(0, 2, 1)
+            raise ValueError("Raw audio detected. Dataset should be outputting mel spectograms")
         elif len(audio_features.shape) == 4:
             batch_size, channels, features, time = audio_features.shape
-            x = audio_features.squeeze(1).permute(0, 2, 1)
+            x = audio_features.squeeze(1)
         else:
-            raise ValueError(f"Unexpected audio features shape: {audio_features.shape}")
+            raise ValueError("Unexpected audio features shape: {audio_features.shape}")
+
+        #if len(audio_features.shape) == 3:
+        #    batch_size, channels, time = audio_features.shape
+        #    x = audio_features.view(batch_size, channels, -1, time // channels)
+        #    x = x.squeeze(1).permute(0, 2, 1)
+        #elif len(audio_features.shape) == 4:
+        #    batch_size, channels, features, time = audio_features.shape
+        #    x = audio_features.squeeze(1).permute(0, 2, 1)
+        #else:
+        #    raise ValueError(f"Unexpected audio features shape: {audio_features.shape}")
 
 
         # apply convolutions (need to switch dimension for conv1d)
-        x = x.transpose(1, 2) # [batch, features, time]
+        #x = x.transpose(1, 2) # [batch, features, time]
         x = self.relu(self.conv1(x))
         x = self.relu(self.conv2(x))
         x = self.relu(self.conv3(x))

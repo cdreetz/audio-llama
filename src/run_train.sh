@@ -5,5 +5,4 @@ python train.py \
 	--whisper_path openai/whisper-large-v3-turbo \
 	--output_dir ./checkpoints \
 	--fp16 \
-	--use_wandb \
-	--skip_missing_files
+	--use_wandb 
