@@ -10,7 +10,7 @@ class AudioLLMDataset(Dataset):
     def __init__(
         self, 
         data_entries,
-        audio_dir="./data/huggingface",
+        audio_dir="./audio",
         whisper_processor=None, 
         llama_tokenizer=None,
         max_audio_length=30,  # seconds
@@ -52,12 +52,26 @@ class AudioLLMDataset(Dataset):
         item = self.data[idx]
 
         text = item.get("text", "")
-        audio_filename = item.get("audio_filename", "")
+        text = item.get("text", "")
+        audio_path = item.get("audio_paths", "")
         
         audio_features = None
-        if audio_filename:
-            full_path = os.path.join(self.audio_dir, audio_filename)
-            audio_features = self._process_audio(full_path)
+        if audio_path:
+            full_path = os.path.join(self.audio_dir, audio_path)
+            if not os.path.exists(full_path) and audio_path.startswith("audio/"):
+                # Try without 'audio/' prefix
+                fixed_path = audio_path[6:]
+                full_path = os.path.join(self.audio_dir, fixed_path)
+            
+            if os.path.exists(full_path):
+                try:
+                    audio_features = self._process_audio(full_path)
+                except Exception as e:
+                    print(f"Error processing audio file {full_path}: {str(e)}")
+                    if not self.use_dummy_audio_for_missing:
+                        raise
+            elif not self.use_dummy_audio_for_missing:
+                raise FileNotFoundError(f"Audio file not found: {full_path}")
         
         tokenized = self.llama_tokenizer(
             text,
@@ -83,7 +97,7 @@ class AudioLLMDataset(Dataset):
             "audio_features": audio_features,
             "labels": response_tokenized.input_ids.squeeze(0),
             "text": text,
-            "audio_path": audio_filename,
+            "audio_path": audio_path,
         }
     
     def _process_audio(self, audio_path):
@@ -166,15 +180,21 @@ class AudioLLMDataset(Dataset):
 
 
 def collate_fn(batch):
-    audio_features = torch.stack([item["audio_features"] for item in batch])
-    input_ids = torch.stack([item["input_ids"] for item in batch])
-    attention_mask = torch.stack([item["attention_mask"] for item in batch])
-    labels = torch.stack([item["labels"] for item in batch])
+    # Filter out items with None audio_features
+    valid_items = [item for item in batch if item["audio_features"] is not None]
+    
+    if not valid_items:
+        raise ValueError("No valid audio features found in batch. Check audio file paths and processing.")
+    
+    audio_features = torch.stack([item["audio_features"] for item in valid_items])
+    input_ids = torch.stack([item["input_ids"] for item in valid_items])
+    attention_mask = torch.stack([item["attention_mask"] for item in valid_items])
+    labels = torch.stack([item["labels"] for item in valid_items])
     
     return {
-        "audio_features": audio_features if len(audio_features) > 0 else None,
+        "audio_features": audio_features,
         "input_ids": input_ids,
         "attention_mask": attention_mask,
         "labels": labels,
-        "metadata": [item.get("metadata", {}) for item in batch]
+        "metadata": [item.get("metadata", {}) for item in valid_items]
     }
