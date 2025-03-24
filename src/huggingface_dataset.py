@@ -6,6 +6,29 @@ from tqdm import tqdm
 from multiprocessing import Pool, cpu_count
 import soundfile as sf
 
+def process_item(args):
+    subset, idx, item, output_dir = args
+    audio_data = item['audio']
+    sampling_rate = audio_data['sampling_rate']
+    duration = item['duration']
+    
+    audio_filename = f"{subset}_{idx:06d}.wav"
+    audio_path = os.path.join(output_dir, audio_filename)
+    
+    sf.write(audio_path, audio_data['array'], sampling_rate)
+    
+    return {
+        'id': f"{subset}_{idx}",
+        'audio_filename': audio_filename,
+        'duration': duration,
+        'text': item['text'],
+        'text_norm': item['text_norm'],
+        'whisper_transcript': item['whisper_transcript'],
+        'whisper_transcript_norm': item['whisper_transcript_norm'],
+        'wer': item['wer'],
+        'sampling_rate': sampling_rate
+    }
+
 def download_huggingface_dataset(
     dataset_name="bofenghuang/stt-pseudo-labeled-whisper-large-v3-multilingual",
     subsets=None,  # List of subsets to use
@@ -30,63 +53,38 @@ def download_huggingface_dataset(
     if subsets is None:
         subsets = ["en-ls", "en-gigaspeech-l"]  # Default to these two subsets
     
-    def process_subset(subset):
-        print(f"\nProcessing subset: {subset}")
-        print(f"Loading dataset {dataset_name} ({subset})...")
-        dataset = load_dataset(
-            dataset_name,
-            subset,
-            split=split,
-            trust_remote_code=True
-        )
-        
-        if max_wer is not None:
-            original_size = len(dataset)
-            dataset = dataset.filter(lambda x: x['wer'] <= max_wer)
-            print(f"Filtered {original_size - len(dataset)} samples with WER > {max_wer}%")
-            print(f"Remaining samples: {len(dataset)}")
-        
-        def process_item(args):
-            idx, item = args
-            audio_data = item['audio']
-            sampling_rate = audio_data['sampling_rate']
-            duration = item['duration']
+    all_metadata = []
+    num_workers = max(1, (cpu_count() - 1))  # Leave one CPU free
+    
+    with Pool(num_workers) as pool:
+        for subset in subsets:
+            print(f"\nProcessing subset: {subset}")
+            print(f"Loading dataset {dataset_name} ({subset})...")
+            dataset = load_dataset(
+                dataset_name,
+                subset,
+                split=split,
+                trust_remote_code=True
+            )
             
-            audio_filename = f"{subset}_{idx:06d}.wav"
-            audio_path = os.path.join(output_dir, audio_filename)
+            if max_wer is not None:
+                original_size = len(dataset)
+                dataset = dataset.filter(lambda x: x['wer'] <= max_wer)
+                print(f"Filtered {original_size - len(dataset)} samples with WER > {max_wer}%")
+                print(f"Remaining samples: {len(dataset)}")
             
-            sf.write(audio_path, audio_data['array'], sampling_rate)
+            # Prepare arguments for process_item
+            process_args = [(subset, idx, item, output_dir) for idx, item in enumerate(dataset)]
             
-            return {
-                'id': f"{subset}_{idx}",
-                'audio_filename': audio_filename,
-                'duration': duration,
-                'text': item['text'],
-                'text_norm': item['text_norm'],
-                'whisper_transcript': item['whisper_transcript'],
-                'whisper_transcript_norm': item['whisper_transcript_norm'],
-                'wer': item['wer'],
-                'sampling_rate': sampling_rate
-            }
-        
-        # Process items in parallel
-        print(f"Processing {subset} audio files...")
-        num_workers = max(1, (cpu_count() - 1) // len(subsets))  # Distribute workers across subsets
-        with Pool(num_workers) as pool:
+            # Process items in parallel
+            print(f"Processing {subset} audio files...")
             subset_metadata = list(tqdm(
-                pool.imap(process_item, enumerate(dataset)),
+                pool.imap(process_item, process_args),
                 total=len(dataset),
                 desc=f"Processing {subset}"
             ))
-        
-        return subset_metadata
-    
-    # Process all subsets in parallel
-    with Pool(len(subsets)) as pool:
-        all_subset_metadata = pool.map(process_subset, subsets)
-    
-    # Flatten the list of metadata
-    all_metadata = [item for subset_metadata in all_subset_metadata for item in subset_metadata]
+            
+            all_metadata.extend(subset_metadata)
     
     # Generate instruction examples
     examples = generate_instruction_examples(all_metadata)
@@ -96,7 +94,7 @@ def download_huggingface_dataset(
     examples_path = os.path.join(output_dir, 'instruction_examples.json')
     
     with open(metadata_path, 'w') as f:
-        json.dump(metadata, f, indent=2)
+        json.dump(all_metadata, f, indent=2)
         
     with open(examples_path, 'w') as f:
         json.dump(examples, f, indent=2)
@@ -105,7 +103,7 @@ def download_huggingface_dataset(
     print(f"Instruction examples saved to {examples_path}")
     
     print(f"Dataset processed and saved to {output_dir}")
-    print(f"Total samples: {len(metadata)}")
+    print(f"Total samples: {len(all_metadata)}")
     return metadata_path
 
 def generate_instruction_examples(metadata):
