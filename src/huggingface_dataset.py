@@ -3,6 +3,8 @@ import json
 import random
 from datasets import load_dataset
 from tqdm import tqdm
+from multiprocessing import Pool, cpu_count
+import soundfile as sf
 
 def download_huggingface_dataset(
     dataset_name="bofenghuang/stt-pseudo-labeled-whisper-large-v3-multilingual",
@@ -47,26 +49,19 @@ def download_huggingface_dataset(
             print(f"Filtered {original_size - len(dataset)} samples with WER > {max_wer}%")
             print(f"Remaining samples: {len(dataset)}")
     
-        # Process each item in the dataset
-        print(f"Processing {subset} audio files...")
-        subset_metadata = []
-        
-        for idx, item in enumerate(tqdm(dataset)):
-            # Extract audio data
+        def process_item(args):
+            idx, item = args
             audio_data = item['audio']
             sampling_rate = audio_data['sampling_rate']
             duration = item['duration']
             
-            # Generate a filename for this audio sample
             audio_filename = f"{subset}_{idx:06d}.wav"
             audio_path = os.path.join(output_dir, audio_filename)
             
             # Save audio data
-            import soundfile as sf
             sf.write(audio_path, audio_data['array'], sampling_rate)
             
-            # Create metadata entry
-            entry = {
+            return {
                 'id': f"{subset}_{idx}",
                 'audio_filename': audio_filename,
                 'duration': duration,
@@ -77,7 +72,15 @@ def download_huggingface_dataset(
                 'wer': item['wer'],
                 'sampling_rate': sampling_rate
             }
-            subset_metadata.append(entry)
+        
+        # Process items in parallel
+        print(f"Processing {subset} audio files...")
+        num_workers = max(1, cpu_count() - 1)  # Leave one CPU free
+        with Pool(num_workers) as pool:
+            subset_metadata = list(tqdm(
+                pool.imap(process_item, enumerate(dataset)),
+                total=len(dataset)
+            ))
         
         all_metadata.extend(subset_metadata)
     

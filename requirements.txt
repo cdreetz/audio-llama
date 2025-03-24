@@ -1,4 +1,6 @@
-torchaudio
+torch==2.6.0
+torchaudio==2.6.0
 tqdm
 wandb
 transformers
+datasets
