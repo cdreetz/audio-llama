@@ -8,8 +8,8 @@ from dataset import AudioLLMDataset, collate_fn
 
 
 def create_dataloaders(
-    data_path,
-    audio_dir,
+    metadata_path,
+    audio_dir="./data/huggingface",
     whisper_model_id="openai/whisper-large-v3-turbo",
     llama_model_id="meta-llama/Llama-3.2-3B-Instruct",
     batch_size=8,
@@ -44,8 +44,12 @@ def create_dataloaders(
     llama_tokenizer = AutoTokenizer.from_pretrained(llama_model_id)
     llama_tokenizer.pad_token = llama_tokenizer.eos_token
 
-    with open(data_path, 'r', encoding='utf-8') as f:
-        data_entries = json.load(f)
+    with open(metadata_path, 'r', encoding='utf-8') as f:
+        metadata = json.load(f)
+        # Flatten the metadata structure from huggingface dataset format
+        data_entries = []
+        for subset_data in metadata.values():
+            data_entries.extend(subset_data)
     
     random.shuffle(data_entries)
     split_idx = int(len(data_entries) * train_split)

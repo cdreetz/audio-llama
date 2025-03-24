@@ -10,7 +10,7 @@ class AudioLLMDataset(Dataset):
     def __init__(
         self, 
         data_entries,
-        audio_dir="./audio",
+        audio_dir="./data/huggingface",
         whisper_processor=None, 
         llama_tokenizer=None,
         max_audio_length=30,  # seconds
@@ -52,11 +52,11 @@ class AudioLLMDataset(Dataset):
         item = self.data[idx]
 
         text = item.get("text", "")
-        audio_path = item.get("audio_paths", "")
+        audio_filename = item.get("audio_filename", "")
         
         audio_features = None
-        if audio_path:
-            full_path = os.path.join(self.audio_dir, audio_path)
+        if audio_filename:
+            full_path = os.path.join(self.audio_dir, audio_filename)
             audio_features = self._process_audio(full_path)
         
         tokenized = self.llama_tokenizer(
@@ -83,7 +83,7 @@ class AudioLLMDataset(Dataset):
             "audio_features": audio_features,
             "labels": response_tokenized.input_ids.squeeze(0),
             "text": text,
-            "audio_path": audio_path,
+            "audio_path": audio_filename,
         }
     
     def _process_audio(self, audio_path):
