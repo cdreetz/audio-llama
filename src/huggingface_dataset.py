@@ -32,20 +32,33 @@ def process_audio(args):
         'sampling_rate': sampling_rate
     }
 
+def load_dataset_with_timeout(dataset_name, subset, split, cache_dir=None):
+    """Load a dataset with timeout handling and retries"""
+    import time
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            return load_dataset(
+                dataset_name,
+                subset,
+                split=split,
+                trust_remote_code=True,
+                cache_dir=cache_dir,
+                num_proc=4  # Use multiple processes for dataset loading
+            )
+        except Exception as e:
+            if attempt < max_retries - 1:
+                print(f"Error loading {subset}, retrying ({attempt+1}/{max_retries}): {e}")
+                time.sleep(2)  # Short delay before retry
+            else:
+                raise
+
 def process_subset(args):
     """Process an entire subset in parallel"""
     dataset_name, subset, split, max_wer, output_dir, chunk_size = args
     
     print(f"\nProcessing subset: {subset}")
     print(f"Loading dataset {dataset_name} ({subset})...")
-    
-    # Load the dataset
-    dataset = load_dataset(
-        dataset_name,
-        subset,
-        split=split,
-        trust_remote_code=True
-    )
     
     # Filter by WER if needed
     if max_wer is not None:
@@ -86,7 +99,9 @@ def download_huggingface_dataset(
     split="train",
     max_wer=None,
     max_workers=None,
-    chunk_size=100
+    chunk_size=100,
+    download_workers=None,
+    cache_dir=None
 ):
     """
     Download and format the Hugging Face dataset for use with AudioLLM.
@@ -111,15 +126,85 @@ def download_huggingface_dataset(
     if max_workers is None:
         max_workers = min(len(subsets), max(1, cpu_count() - 1))
     
-    # Process subsets in parallel using ThreadPoolExecutor (for I/O bound subset loading)
-    # and ProcessPoolExecutor (for CPU bound audio processing)
-    all_metadata = []
-    subset_args = [(dataset_name, subset, split, max_wer, output_dir, chunk_size) for subset in subsets]
+    # Set download workers if not specified
+    if download_workers is None:
+        download_workers = min(len(subsets), 8)  # Default to max 8 concurrent downloads
     
-    print(f"Processing {len(subsets)} subsets using {max_workers} workers")
+    # First, pre-download all datasets in parallel using threads (for I/O-bound operations)
+    print(f"Pre-downloading {len(subsets)} datasets using {download_workers} concurrent downloads...")
+    datasets = {}
+    
+    def download_dataset(subset):
+        try:
+            print(f"Starting download of {subset}...")
+            dataset = load_dataset_with_timeout(dataset_name, subset, split, cache_dir)
+            if max_wer is not None:
+                original_size = len(dataset)
+                dataset = dataset.filter(lambda x: x['wer'] <= max_wer)
+                print(f"Filtered {original_size - len(dataset)} samples with WER > {max_wer}% for {subset}")
+            print(f"Download complete for {subset} with {len(dataset)} samples")
+            return subset, dataset
+        except Exception as e:
+            print(f"Error downloading {subset}: {e}")
+            return subset, None
+    
+    # Use ThreadPoolExecutor for parallel downloading (I/O bound)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=download_workers) as executor:
+        future_to_subset = {executor.submit(download_dataset, subset): subset for subset in subsets}
+        for future in concurrent.futures.as_completed(future_to_subset):
+            subset, dataset = future.result()
+            if dataset is not None:
+                datasets[subset] = dataset
+    
+    # Now process the pre-downloaded datasets
+    all_metadata = []
+    
+    # Only process subsets that were successfully downloaded
+    valid_subsets = list(datasets.keys())
+    print(f"Successfully downloaded {len(valid_subsets)} out of {len(subsets)} subsets")
+    
+    if not valid_subsets:
+        print("No datasets were successfully downloaded. Exiting.")
+        return None
+    
+    # Process each dataset in parallel
+    subset_args = []
+    for subset in valid_subsets:
+        # Store dataset in the args to avoid re-downloading
+        subset_args.append((dataset_name, subset, split, max_wer, output_dir, chunk_size, datasets[subset]))
+    
+    print(f"Processing {len(valid_subsets)} subsets using {max_workers} workers")
+    
+    # Define a new function that processes a pre-downloaded dataset
+    def process_downloaded_dataset(args):
+        dataset_name, subset, split, max_wer, output_dir, chunk_size, dataset = args
+        print(f"Processing subset: {subset}")
+        
+        # Process in chunks to optimize memory usage
+        results = []
+        process_args = [(subset, idx, item, output_dir) for idx, item in enumerate(dataset)]
+        
+        num_chunks = (len(process_args) + chunk_size - 1) // chunk_size
+        
+        # Process chunks in parallel using a local process pool
+        with Pool(processes=max(1, min(8, cpu_count() // 2))) as pool:
+            for i in range(num_chunks):
+                start_idx = i * chunk_size
+                end_idx = min(start_idx + chunk_size, len(process_args))
+                chunk_args = process_args[start_idx:end_idx]
+                
+                chunk_results = list(tqdm(
+                    pool.imap(process_audio, chunk_args),
+                    total=len(chunk_args),
+                    desc=f"Processing {subset} chunk {i+1}/{num_chunks}"
+                ))
+                
+                results.extend(chunk_results)
+        
+        return results
     
     with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(process_subset, args) for args in subset_args]
+        futures = [executor.submit(process_downloaded_dataset, args) for args in subset_args]
         
         # Collect results as they complete
         for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc="Processing subsets"):
@@ -235,6 +320,10 @@ if __name__ == "__main__":
                       help="Maximum number of worker processes for parallel subset processing")
     parser.add_argument("--chunk-size", type=int, default=100,
                       help="Number of audio files to process in each chunk")
+    parser.add_argument("--download-workers", type=int, default=None,
+                      help="Maximum number of concurrent dataset downloads")
+    parser.add_argument("--cache-dir", type=str, default=None,
+                      help="Custom cache directory for Hugging Face datasets")
     
     args = parser.parse_args()
     
@@ -246,5 +335,7 @@ if __name__ == "__main__":
         output_metadata=args.metadata,
         split=args.split,
         max_workers=args.max_workers,
-        chunk_size=args.chunk_size
+        chunk_size=args.chunk_size,
+        download_workers=args.download_workers,
+        cache_dir=args.cache_dir
     )
