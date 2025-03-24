@@ -3,14 +3,17 @@ import json
 import random
 from datasets import load_dataset
 from tqdm import tqdm
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool, cpu_count, Manager
+import concurrent.futures
 import soundfile as sf
+import numpy as np
+from itertools import chain
 
-def process_item(args):
+def process_audio(args):
+    """Process a single audio file"""
     subset, idx, item, output_dir = args
     audio_data = item['audio']
     sampling_rate = audio_data['sampling_rate']
-    duration = item['duration']
     
     audio_filename = f"{subset}_{idx:06d}.wav"
     audio_path = os.path.join(output_dir, audio_filename)
@@ -20,7 +23,7 @@ def process_item(args):
     return {
         'id': f"{subset}_{idx}",
         'audio_filename': audio_filename,
-        'duration': duration,
+        'duration': item['duration'],
         'text': item['text'],
         'text_norm': item['text_norm'],
         'whisper_transcript': item['whisper_transcript'],
@@ -29,23 +32,74 @@ def process_item(args):
         'sampling_rate': sampling_rate
     }
 
+def process_subset(args):
+    """Process an entire subset in parallel"""
+    dataset_name, subset, split, max_wer, output_dir, chunk_size = args
+    
+    print(f"\nProcessing subset: {subset}")
+    print(f"Loading dataset {dataset_name} ({subset})...")
+    
+    # Load the dataset
+    dataset = load_dataset(
+        dataset_name,
+        subset,
+        split=split,
+        trust_remote_code=True
+    )
+    
+    # Filter by WER if needed
+    if max_wer is not None:
+        original_size = len(dataset)
+        dataset = dataset.filter(lambda x: x['wer'] <= max_wer)
+        print(f"Filtered {original_size - len(dataset)} samples with WER > {max_wer}%")
+        print(f"Remaining samples: {len(dataset)}")
+    
+    # Prepare arguments for process_audio
+    process_args = [(subset, idx, item, output_dir) for idx, item in enumerate(dataset)]
+    
+    # Process in chunks to optimize memory usage
+    results = []
+    num_chunks = (len(process_args) + chunk_size - 1) // chunk_size
+    
+    # Process chunks in parallel using a local process pool
+    with Pool(processes=max(1, min(8, cpu_count() // 2))) as pool:
+        for i in range(num_chunks):
+            start_idx = i * chunk_size
+            end_idx = min(start_idx + chunk_size, len(process_args))
+            chunk_args = process_args[start_idx:end_idx]
+            
+            chunk_results = list(tqdm(
+                pool.imap(process_audio, chunk_args),
+                total=len(chunk_args),
+                desc=f"Processing {subset} chunk {i+1}/{num_chunks}"
+            ))
+            
+            results.extend(chunk_results)
+    
+    return results
+
 def download_huggingface_dataset(
     dataset_name="bofenghuang/stt-pseudo-labeled-whisper-large-v3-multilingual",
-    subsets=None,  # List of subsets to use
+    subsets=None,
     output_dir="./data/huggingface",
     output_metadata="metadata.json",
     split="train",
-    max_wer=None  # Maximum WER to include
+    max_wer=None,
+    max_workers=None,
+    chunk_size=100
 ):
     """
     Download and format the Hugging Face dataset for use with AudioLLM.
     
     Args:
         dataset_name: Name of the dataset on Hugging Face
-        subset: Subset of the dataset to use
+        subsets: List of subsets to use
         output_dir: Directory to save processed data
         output_metadata: Name of the metadata file to save
         split: Dataset split to use (train/test/validation)
+        max_wer: Maximum WER to include
+        max_workers: Maximum number of worker processes for subset processing
+        chunk_size: Number of audio files to process in each chunk
     """
     # Create output directory
     os.makedirs(output_dir, exist_ok=True)
@@ -53,40 +107,29 @@ def download_huggingface_dataset(
     if subsets is None:
         subsets = ["en-ls", "en-gigaspeech-l"]  # Default to these two subsets
     
+    # Determine max workers based on available CPUs and number of subsets
+    if max_workers is None:
+        max_workers = min(len(subsets), max(1, cpu_count() - 1))
+    
+    # Process subsets in parallel using ThreadPoolExecutor (for I/O bound subset loading)
+    # and ProcessPoolExecutor (for CPU bound audio processing)
     all_metadata = []
-    num_workers = max(1, (cpu_count() - 1))  # Leave one CPU free
+    subset_args = [(dataset_name, subset, split, max_wer, output_dir, chunk_size) for subset in subsets]
     
-    with Pool(num_workers) as pool:
-        for subset in subsets:
-            print(f"\nProcessing subset: {subset}")
-            print(f"Loading dataset {dataset_name} ({subset})...")
-            dataset = load_dataset(
-                dataset_name,
-                subset,
-                split=split,
-                trust_remote_code=True
-            )
-            
-            if max_wer is not None:
-                original_size = len(dataset)
-                dataset = dataset.filter(lambda x: x['wer'] <= max_wer)
-                print(f"Filtered {original_size - len(dataset)} samples with WER > {max_wer}%")
-                print(f"Remaining samples: {len(dataset)}")
-            
-            # Prepare arguments for process_item
-            process_args = [(subset, idx, item, output_dir) for idx, item in enumerate(dataset)]
-            
-            # Process items in parallel
-            print(f"Processing {subset} audio files...")
-            subset_metadata = list(tqdm(
-                pool.imap(process_item, process_args),
-                total=len(dataset),
-                desc=f"Processing {subset}"
-            ))
-            
-            all_metadata.extend(subset_metadata)
+    print(f"Processing {len(subsets)} subsets using {max_workers} workers")
     
-    # Generate instruction examples
+    with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(process_subset, args) for args in subset_args]
+        
+        # Collect results as they complete
+        for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc="Processing subsets"):
+            try:
+                subset_metadata = future.result()
+                all_metadata.extend(subset_metadata)
+            except Exception as e:
+                print(f"Error processing subset: {e}")
+    
+    # Generate instruction examples in parallel
     examples = generate_instruction_examples(all_metadata)
     
     # Save both metadata and examples
@@ -143,25 +186,33 @@ def generate_instruction_examples(metadata):
     ]
     
     instruction_templates.extend(advanced_templates)
-    
     examples = []
     
-    print("Generating instruction examples...")
-    for entry in tqdm(metadata):
-        # Create instruction example
-        instruction = random.choice(instruction_templates)
-        
-        example = {
-            "id": entry["id"],
-            "audio_filename": entry["audio_filename"],
-            "instruction": instruction,
-            "input": "",  # No additional input needed
-            "output": entry["text"],  # Using the original text as ground truth
-            "whisper_output": entry["whisper_transcript"],  # Store Whisper's output for reference
-            "wer": entry["wer"]  # Store WER for quality assessment
-        }
-        
-        examples.append(example)
+    # Process in parallel chunks for faster generation
+    with Pool(processes=max(1, cpu_count() // 2)) as pool:
+        chunk_size = 1000
+        for i in range(0, len(metadata), chunk_size):
+            chunk = metadata[i:i+chunk_size]
+            
+            # Create instruction examples in parallel
+            results = list(tqdm(
+                pool.map(
+                    lambda entry: {
+                        "id": entry["id"],
+                        "audio_filename": entry["audio_filename"],
+                        "instruction": random.choice(instruction_templates),
+                        "input": "",
+                        "output": entry["text"],
+                        "whisper_output": entry["whisper_transcript"],
+                        "wer": entry["wer"]
+                    },
+                    chunk
+                ),
+                total=len(chunk),
+                desc=f"Generating examples {i}-{i+len(chunk)}/{len(metadata)}"
+            ))
+            
+            examples.extend(results)
     
     return examples
 
@@ -180,6 +231,10 @@ if __name__ == "__main__":
                       help="Name of the metadata file")
     parser.add_argument("--split", default="train",
                       help="Dataset split to use (train/test/validation)")
+    parser.add_argument("--max-workers", type=int, default=None,
+                      help="Maximum number of worker processes for parallel subset processing")
+    parser.add_argument("--chunk-size", type=int, default=100,
+                      help="Number of audio files to process in each chunk")
     
     args = parser.parse_args()
     
@@ -189,5 +244,7 @@ if __name__ == "__main__":
         max_wer=args.max_wer,
         output_dir=args.output_dir,
         output_metadata=args.metadata,
-        split=args.split
+        split=args.split,
+        max_workers=args.max_workers,
+        chunk_size=args.chunk_size
     )
