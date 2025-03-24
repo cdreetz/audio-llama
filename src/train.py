@@ -185,7 +185,7 @@ def train(args):
     # Create dataloaders
     logger.info("Creating dataloaders...")
     train_dataloader, val_dataloader = create_dataloaders(
-        data_path=args.data_path,
+        metadata_path=args.data_path,
         audio_dir=args.audio_dir,
         whisper_model_id=args.whisper_path,
         llama_model_id=args.llama_path,
