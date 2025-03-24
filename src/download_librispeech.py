@@ -93,7 +93,7 @@ def process_subset(subset_name, download_dir, audio_dir, metadata_list):
                         if file_id in transcriptions:
                             # Add to metadata
                             metadata_list.append({
-                                "audio_path": os.path.relpath(dst_path, start=os.path.dirname(audio_dir)),
+                                "audio_path": os.path.relpath(dst_path, start=audio_dir),
                                 "speaker_id": speaker_id,
                                 "chapter_id": chapter_id,
                                 "file_id": file_id,

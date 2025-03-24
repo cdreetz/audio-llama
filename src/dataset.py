@@ -87,14 +87,17 @@ class AudioLLMDataset(Dataset):
         }
     
     def _process_audio(self, audio_path):
-        try:
-            if not os.path.exists(audio_path):
-                raise FileNotFoundError(f"Audio file not found: {audio_path}")
-            waveform, sample_rate = torchaudio.load(audio_path)
-
-        except Exception as e:
-            print(f"Error loading {audio_path}: {e}")
-            return torch.zeros((1, 80, 1000))
+        if not os.path.exists(audio_path):
+            raise FileNotFoundError(f"Audio file not found: {audio_path}")
+            
+        waveform, sample_rate = torchaudio.load(audio_path)
+        max_frames = self.max_audio_length * self.sample_rate
+        
+        if waveform.shape[1] > max_frames:
+            waveform = waveform[:, :max_frames]
+        elif waveform.shape[1] < max_frames:
+            pad_len = max_frames - waveform.shape[1]
+            waveform = torch.nn.functional.pad(waveform, (0, pad_len))
         
         # Convert to mono if stereo
         if waveform.shape[0] > 1:
@@ -107,7 +110,7 @@ class AudioLLMDataset(Dataset):
             )
             waveform = resampler(waveform)
 
-        mel_spectogram = torchaudio.transforms.MelSpectrogram(
+        mel_spectrogram = torchaudio.transforms.MelSpectrogram(
             sample_rate=self.sample_rate,
             n_fft=400,
             hop_length=160,
@@ -117,13 +120,6 @@ class AudioLLMDataset(Dataset):
 
         log_mel = torch.log(mel_spectrogram + 1e-9)
 
-        
-        # audio to Whisper features
-        #input_features = self.whisper_processor(
-        #    waveform.squeeze().numpy(),
-        #    sampling_rate=self.sample_rate,
-        #    return_tensors="pt"
-        #).input_features
         
         # output shape [1, 80, time_frames]
         return log_mel

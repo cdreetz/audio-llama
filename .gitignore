@@ -19,3 +19,13 @@ checkpoints/
 llama-3.2-3b/
 wandb/
 peft_model/
+
+librispeech_metadata.json
+*/librispeech_metadata.json
+librispeech_data/
+librispeech_data/audio/
+librispeech_data/audio_instruction_examples.txt
+librispeech_data/librispeech_metadata.json
+
+audio_instruction_examples.json
+*/audio_instruction_examples.json
