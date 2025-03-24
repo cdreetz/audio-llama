@@ -30,9 +30,7 @@ def download_huggingface_dataset(
     if subsets is None:
         subsets = ["en-ls", "en-gigaspeech-l"]  # Default to these two subsets
     
-    all_metadata = []
-    
-    for subset in subsets:
+    def process_subset(subset):
         print(f"\nProcessing subset: {subset}")
         print(f"Loading dataset {dataset_name} ({subset})...")
         dataset = load_dataset(
@@ -43,12 +41,11 @@ def download_huggingface_dataset(
         )
         
         if max_wer is not None:
-            # Filter by WER
             original_size = len(dataset)
             dataset = dataset.filter(lambda x: x['wer'] <= max_wer)
             print(f"Filtered {original_size - len(dataset)} samples with WER > {max_wer}%")
             print(f"Remaining samples: {len(dataset)}")
-    
+        
         def process_item(args):
             idx, item = args
             audio_data = item['audio']
@@ -58,7 +55,6 @@ def download_huggingface_dataset(
             audio_filename = f"{subset}_{idx:06d}.wav"
             audio_path = os.path.join(output_dir, audio_filename)
             
-            # Save audio data
             sf.write(audio_path, audio_data['array'], sampling_rate)
             
             return {
@@ -75,14 +71,22 @@ def download_huggingface_dataset(
         
         # Process items in parallel
         print(f"Processing {subset} audio files...")
-        num_workers = max(1, cpu_count() - 1)  # Leave one CPU free
+        num_workers = max(1, (cpu_count() - 1) // len(subsets))  # Distribute workers across subsets
         with Pool(num_workers) as pool:
             subset_metadata = list(tqdm(
                 pool.imap(process_item, enumerate(dataset)),
-                total=len(dataset)
+                total=len(dataset),
+                desc=f"Processing {subset}"
             ))
         
-        all_metadata.extend(subset_metadata)
+        return subset_metadata
+    
+    # Process all subsets in parallel
+    with Pool(len(subsets)) as pool:
+        all_subset_metadata = pool.map(process_subset, subsets)
+    
+    # Flatten the list of metadata
+    all_metadata = [item for subset_metadata in all_subset_metadata for item in subset_metadata]
     
     # Generate instruction examples
     examples = generate_instruction_examples(all_metadata)
