@@ -45,11 +45,8 @@ def create_dataloaders(
     llama_tokenizer.pad_token = llama_tokenizer.eos_token
 
     with open(metadata_path, 'r', encoding='utf-8') as f:
-        metadata = json.load(f)
-        # Flatten the metadata structure from huggingface dataset format
-        data_entries = []
-        for subset_data in metadata.values():
-            data_entries.extend(subset_data)
+        data_entries = json.load(f)
+        # Metadata is already a list from huggingface_dataset.py
     
     random.shuffle(data_entries)
     split_idx = int(len(data_entries) * train_split)
