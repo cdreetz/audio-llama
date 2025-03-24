@@ -36,12 +36,20 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Quick Start
+## Data
 
-Try the minimal example:
-
+### LibriSpeech
 ```bash
-python min-example.py
+cd src
+./run_librispeech.sh
+```
+
+### Hugging Face (Recommended)
+```bash
+python download_huggingface.py --max-wer 5.0
+# audio files saved in ./data/huggingface dir
+# examples saved in instruction_examples.json
+
 ```
 
 ### Training
@@ -56,6 +64,8 @@ python train.py \
     --batch_size 8 \
     --num_epochs 5 \
     --learning_rate 5e-5
+    --fp16
+    --use_wandb
 ```
 
 See `train.py` for additional training options.
@@ -64,18 +74,13 @@ See `train.py` for additional training options.
 
 ```bash
 python inference.py \
-    --model_path ./checkpoints/final_checkpoint \
-    --audio_path /path/to/audio.wav \
-    --prompt "Describe this audio: <audio>"
+# TODO
 ```
 
 ### Evaluation
 
 ```bash
-python eval.py \
-    --model_path ./checkpoints/final_checkpoint \
-    --data_path /path/to/eval_dataset.json \
-    --audio_dir /path/to/audio/files
+# TODO
 ```
 
 ## Dataset Format
