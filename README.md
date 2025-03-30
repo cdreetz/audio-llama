@@ -12,6 +12,8 @@ AudioLLM is a research project that combines large language models (LLaMA) with 
 
 ## Architecture
 
+<img src="https://github.com/cdreetz/audio-llama/blob/master/Screenshot20atE2AFPM.png" width="600">
+
 AudioLLM works by:
 
 1. Processing audio inputs through the Whisper encoder
