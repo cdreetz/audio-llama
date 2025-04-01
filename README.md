@@ -12,7 +12,7 @@ AudioLLM is a research project that combines large language models (LLaMA) with 
 
 ## Architecture
 
-<img src="https://github.com/cdreetz/audio-llama/blob/master/audio-llama.png" width="600">
+<img src="https://github.com/cdreetz/audio-llama/blob/master/public/audio-llama.png" width="600">
 
 AudioLLM works by:
 
