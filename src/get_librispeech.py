@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-LibriSpeech Dataset Downloader
+LibriSpeech Dataset Downloader - Improved with Parallel Downloads
 
 This script downloads and processes LibriSpeech data into a standardized format
 compatible with the AudioLLM training pipeline. The script handles:
-1. Downloading the requested LibriSpeech subsets
-2. Processing audio files into a consistent directory structure
-3. Creating metadata and examples files in the standard format
+1. Downloading the requested LibriSpeech subsets in parallel
+2. Extracting archives in parallel
+3. Processing audio files into a consistent directory structure
+4. Creating metadata and examples files in the standard format
 
 Usage:
     python download_librispeech.py --subsets test-clean dev-clean train-clean-100
@@ -24,6 +25,7 @@ import shutil
 import requests
 import random
 import argparse
+import multiprocessing
 from tqdm import tqdm
 from pathlib import Path
 import concurrent.futures
@@ -74,6 +76,25 @@ def download_file(url, output_path):
         for data in response.iter_content(chunk_size=1024):
             size = file.write(data)
             bar.update(size)
+    
+    return output_path
+
+def download_subset(subset, download_dir, force_download=False):
+    """Download a specific LibriSpeech subset."""
+    if subset not in LIBRISPEECH_SUBSETS:
+        print(f"Unknown subset: {subset}")
+        return None
+    
+    url = LIBRISPEECH_SUBSETS[subset]
+    tar_path = os.path.join(download_dir, f"{subset}.tar.gz")
+    
+    # Download file if it doesn't exist or force_download is True
+    if force_download or not os.path.exists(tar_path):
+        tar_path = download_file(url, tar_path)
+        return tar_path
+    else:
+        print(f"Skipping download for {subset} (file already exists)")
+        return tar_path
 
 def extract_tar(tar_path, extract_dir):
     """Extract tar file with progress tracking."""
@@ -83,6 +104,12 @@ def extract_tar(tar_path, extract_dir):
             for member in members:
                 tar.extract(member, path=extract_dir)
                 bar.update(1)
+    
+    # Get the subset name from the tar file name
+    subset = os.path.basename(tar_path).replace('.tar.gz', '')
+    subset_dir = os.path.join(extract_dir, "LibriSpeech", subset)
+    
+    return subset_dir
 
 def clean_text(text):
     """Clean transcription text to a more natural format."""
@@ -99,108 +126,114 @@ def clean_text(text):
     
     return text
 
-def process_subset(subset_name, extract_dir, audio_dir, metadata_list, relative_audio_path=True):
+def process_subset(subset_name, extract_dir, audio_dir, relative_audio_path=True, max_workers=None):
     """Process a LibriSpeech subset to create metadata and organize audio files."""
     subset_dir = os.path.join(extract_dir, "LibriSpeech", subset_name)
+
+    if not os.path.exists(subset_dir):
+        print(f"Subset directory not found: {subset_dir}")
+        return []
     
     print(f"Processing {subset_name} directory...")
     
     # Create the subset directory in the audio output directory
     os.makedirs(os.path.join(audio_dir, subset_name), exist_ok=True)
-    
-    # Convert flac files to desired format and build metadata
-    for speaker_id in tqdm(os.listdir(subset_dir), desc=f"Processing speakers in {subset_name}"):
+
+    chapter_dirs = []
+    for speaker_id in os.listdir(subset_dir):
         speaker_path = os.path.join(subset_dir, speaker_id)
         if not os.path.isdir(speaker_path):
             continue
-            
+
         for chapter_id in os.listdir(speaker_path):
             chapter_path = os.path.join(speaker_path, chapter_id)
-            if not os.path.isdir(chapter_path):
-                continue
-                
-            # Find the transcript file
-            transcript_file = os.path.join(chapter_path, f"{speaker_id}-{chapter_id}.trans.txt")
-            
-            if os.path.exists(transcript_file):
-                # Read all transcriptions
-                transcriptions = {}
-                with open(transcript_file, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        parts = line.strip().split(' ', 1)
-                        if len(parts) == 2:
-                            file_id, text = parts
-                            transcriptions[file_id] = text
-                
-                # Process audio files
-                for file_name in os.listdir(chapter_path):
-                    if file_name.endswith('.flac'):
-                        file_id = os.path.splitext(file_name)[0]
-                        
-                        # Create structure in audio directory
-                        output_dir = os.path.join(audio_dir, subset_name, speaker_id, chapter_id)
-                        os.makedirs(output_dir, exist_ok=True)
-                        
-                        # Copy the audio file
-                        src_path = os.path.join(chapter_path, file_name)
-                        dst_path = os.path.join(output_dir, file_name)
-                        shutil.copy2(src_path, dst_path)
-                        
-                        if file_id in transcriptions:
-                            # Get the relative path for the audio file
-                            if relative_audio_path:
-                                audio_path = os.path.join(subset_name, speaker_id, chapter_id, file_name)
-                            else:
-                                audio_path = dst_path
-                            
-                            # Clean the transcription text
-                            clean_transcription = clean_text(transcriptions[file_id])
-                            
-                            # Add to metadata
-                            metadata_list.append({
-                                "audio_paths": audio_path,
-                                "speaker_id": speaker_id,
-                                "chapter_id": chapter_id,
-                                "file_id": file_id,
-                                "subset": subset_name,
-                                "text": "",  # Will be filled with instruction later
-                                "response": clean_transcription,
-                                "metadata": {
-                                    "original_transcript": transcriptions[file_id],
-                                    "speaker_id": speaker_id,
-                                    "subset": subset_name
-                                }
-                            })
-    
+            if os.path.isdir(chapter_path):
+                chapter_dirs.append(chapter_path)
+
+    metadata_list = []
+    process_args = [(chapter_path, audio_dir, subset_name, relative_audio_path)
+                    for chapter_path in chapter_dirs]
+
+    if max_workers is None:
+        max_workers = max(1, multiprocessing.cpu_count() - 1) # leave one core free
+
+    with tqdm(total=len(chapter_dirs), desc=f"Processing chapters in {subset_name}") as pbar:
+        with multiprocessing.Pool(processes=max_workers) as pool:
+            for result in pool.imap_unordered(process_chapter, process_args):
+                metadata_list.extend(result)
+                pbar.update(1)
+
     return metadata_list
 
-def download_and_process_subset(subset, download_dir, audio_dir, force_download=False):
-    """Download and process a specific LibriSpeech subset."""
-    if subset not in LIBRISPEECH_SUBSETS:
-        print(f"Unknown subset: {subset}")
+def process_chapter(args):
+    """Process a single LibriSpeech chapter."""
+    chapter_path, audio_dir, subset_name, relative_audio_path = args
+    
+    # Extract speaker_id and chapter_id from path
+    parts = os.path.normpath(chapter_path).split(os.sep)
+    speaker_id = parts[-2]
+    chapter_id = parts[-1]
+    
+    # Find the transcript file
+    transcript_file = os.path.join(chapter_path, f"{speaker_id}-{chapter_id}.trans.txt")
+    
+    if not os.path.exists(transcript_file):
         return []
     
-    url = LIBRISPEECH_SUBSETS[subset]
-    tar_path = os.path.join(download_dir, f"{subset}.tar.gz")
+    # Read all transcriptions
+    transcriptions = {}
+    with open(transcript_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            parts = line.strip().split(' ', 1)
+            if len(parts) == 2:
+                file_id, text = parts
+                transcriptions[file_id] = text
     
-    # Download file if it doesn't exist or force_download is True
-    if force_download or not os.path.exists(tar_path):
-        download_file(url, tar_path)
-    else:
-        print(f"Skipping download for {subset} (file already exists)")
+    # Create output directory
+    output_dir = os.path.join(audio_dir, subset_name, speaker_id, chapter_id)
+    os.makedirs(output_dir, exist_ok=True)
     
-    # Extract archive if the subset directory doesn't exist
-    extract_dir = download_dir
-    subset_dir = os.path.join(extract_dir, "LibriSpeech", subset)
-    if not os.path.exists(subset_dir):
-        extract_tar(tar_path, extract_dir)
-    else:
-        print(f"Skipping extraction for {subset} (directory already exists)")
+    # Process audio files
+    metadata_items = []
+    for file_name in os.listdir(chapter_path):
+        if file_name.endswith('.flac'):
+            file_id = os.path.splitext(file_name)[0]
+            
+            # Copy the audio file
+            src_path = os.path.join(chapter_path, file_name)
+            dst_path = os.path.join(output_dir, file_name)
+            
+            # Efficient file copy with buffer
+            with open(src_path, 'rb') as src, open(dst_path, 'wb') as dst:
+                shutil.copyfileobj(src, dst, 1024*1024)  # 1MB buffer
+            
+            if file_id in transcriptions:
+                # Get the relative path for the audio file
+                if relative_audio_path:
+                    audio_path = os.path.join(subset_name, speaker_id, chapter_id, file_name)
+                else:
+                    audio_path = dst_path
+                
+                # Clean the transcription text
+                clean_transcription = clean_text(transcriptions[file_id])
+                
+                # Add to metadata
+                metadata_items.append({
+                    "audio_paths": audio_path,
+                    "speaker_id": speaker_id,
+                    "chapter_id": chapter_id,
+                    "file_id": file_id,
+                    "subset": subset_name,
+                    "text": "",  # Will be filled with instruction later
+                    "response": clean_transcription,
+                    "metadata": {
+                        "original_transcript": transcriptions[file_id],
+                        "speaker_id": speaker_id,
+                        "subset": subset_name
+                    }
+                })
     
-    # Process subset and return its metadata
-    metadata = []
-    metadata = process_subset(subset, extract_dir, audio_dir, metadata)
-    return metadata
+    return metadata_items
 
 def generate_examples(metadata, output_path, limit=None):
     """
@@ -316,6 +349,8 @@ def main():
                         help='Limit the number of examples to generate')
     parser.add_argument('--seed', type=int, default=42,
                         help='Random seed for reproducibility')
+    parser.add_argument('--workers', type=int, default=None,
+                        help='Number of worker processes (default: CPU count - 1)')
     
     args = parser.parse_args()
     
@@ -340,14 +375,81 @@ def main():
             print(f"  - {subset}")
         return
     
+    # STEP 1: Download all tar files in parallel
+    print("=== STEP 1: Downloading TAR files in parallel ===")
+    tar_paths = {}
+    
+    # Calculate max_workers for download
+    download_workers = args.workers if args.workers is not None else min(len(valid_subsets), multiprocessing.cpu_count())
+    
+    # Always use parallel downloads regardless of --parallel flag
+    with concurrent.futures.ThreadPoolExecutor(max_workers=download_workers) as executor:
+        future_to_subset = {
+            executor.submit(
+                download_subset,
+                subset, 
+                args.download_dir, 
+                args.force_download
+            ): subset
+            for subset in valid_subsets
+        }
+        
+        for future in concurrent.futures.as_completed(future_to_subset):
+            subset = future_to_subset[future]
+            try:
+                tar_path = future.result()
+                if tar_path:
+                    tar_paths[subset] = tar_path
+                    print(f"Downloaded {subset} to {tar_path}")
+            except Exception as e:
+                print(f"Error downloading {subset}: {e}")
+    
+    # STEP 2: Extract all archives in parallel
+    print("\n=== STEP 2: Extracting archives in parallel ===")
+    subset_dirs = {}
+    
+    # Calculate max_workers for extraction
+    extract_workers = args.workers if args.workers is not None else min(len(tar_paths), multiprocessing.cpu_count())
+    
+    with concurrent.futures.ProcessPoolExecutor(max_workers=extract_workers) as executor:
+        future_to_subset = {
+            executor.submit(
+                extract_tar,
+                tar_paths[subset], 
+                args.download_dir
+            ): subset
+            for subset in tar_paths
+        }
+        
+        for future in concurrent.futures.as_completed(future_to_subset):
+            subset = future_to_subset[future]
+            try:
+                subset_dir = future.result()
+                if subset_dir and os.path.exists(subset_dir):
+                    subset_dirs[subset] = subset_dir
+                    print(f"Extracted {subset} to {subset_dir}")
+            except Exception as e:
+                print(f"Error extracting {subset}: {e}")
+    
+    # STEP 3: Process subsets
+    print("\n=== STEP 3: Processing subsets ===")
     all_metadata = []
     
-    if args.parallel and len(valid_subsets) > 1:
+    process_workers = args.workers if args.workers is not None else multiprocessing.cpu_count() - 1
+    
+    if args.parallel and len(subset_dirs) > 1:
         # Process subsets in parallel
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=process_workers) as executor:
             future_to_subset = {
-                executor.submit(download_and_process_subset, subset, args.download_dir, args.audio_dir, args.force_download): subset
-                for subset in valid_subsets
+                executor.submit(
+                    process_subset,
+                    subset, 
+                    args.download_dir, 
+                    args.audio_dir,
+                    True,  # relative_audio_path
+                    process_workers
+                ): subset
+                for subset in subset_dirs
             }
             
             for future in concurrent.futures.as_completed(future_to_subset):
@@ -360,9 +462,9 @@ def main():
                     print(f"Error processing {subset}: {e}")
     else:
         # Process subsets sequentially
-        for subset in valid_subsets:
+        for subset in subset_dirs:
             try:
-                subset_metadata = download_and_process_subset(subset, args.download_dir, args.audio_dir, args.force_download)
+                subset_metadata = process_subset(subset, args.download_dir, args.audio_dir, True, process_workers)
                 all_metadata.extend(subset_metadata)
                 print(f"Completed processing {subset} with {len(subset_metadata)} entries")
             except Exception as e:
@@ -385,7 +487,7 @@ def main():
     # Create dataset config
     create_dataset_config(args.output_dir)
     
-    print(f"Processing complete!")
+    print(f"\nProcessing complete!")
     print(f"Total examples: {len(examples)}")
     print(f"Audio files saved to {args.audio_dir}")
     print(f"Dataset files saved to {args.output_dir}")
