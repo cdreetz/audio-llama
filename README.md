@@ -44,10 +44,10 @@ pip install -r requirements.txt
 
 ```bash
 cd src
-./run_librispeech.sh
+python get_librispeech.py
 ```
 
-### Hugging Face (Recommended)
+### Hugging Face
 
 ```bash
 python download_huggingface.py --max-wer 5.0

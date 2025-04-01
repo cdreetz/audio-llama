@@ -9,6 +9,7 @@ from tqdm import tqdm
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from transformers import LlamaTokenizer, WhisperProcessor, AutoTokenizer
+from transformers import get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup
 from torch.utils.tensorboard import SummaryWriter
 
 from models.allm import AudioLLM
@@ -59,7 +60,7 @@ def parse_args():
                         help="Weight decay")
     parser.add_argument("--warmup_steps", type=int, default=25, 
                         help="Learning rate warmup steps")
-    parser.add_argument("--max_grad_norm", type=float, default=1.0, 
+    parser.add_argument("--max_grad_norm", type=float, default=2.0, 
                         help="Maximum gradient norm for clipping")
     parser.add_argument("--lora_rank", type=int, default=32, 
                         help="Rank for LoRA adapter")
@@ -244,7 +245,11 @@ def train(args):
     
     # Initialize scheduler
     total_steps = len(train_dataloader) * args.num_epochs // args.grad_accum_steps
-    scheduler = CosineAnnealingLR(optimizer, T_max=total_steps, eta_min=1e-6)
+    scheduler = get_cosine_schedule_with_warmup(
+        optimizer,
+        num_warmup_steps=args.warmup_steps,
+        num_training_steps=total_steps
+    )
     
     # Initialize amp scaler for mixed precision
     scaler = torch.cuda.amp.GradScaler(enabled=args.fp16)
