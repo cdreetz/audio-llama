@@ -126,14 +126,20 @@ class AudioLLMDataset(Dataset):
             sample_rate=self.sample_rate,
             n_fft=400,          # ~25ms window at 16kHz
             hop_length=160,     # ~10ms hop at 16kHz
-            n_mels=80,
+            n_mels=128,
             power=2.0
         )(waveform)
 
         log_mel = torch.log(mel_spectrogram + 1e-9)
 
+        frames = log_mel.shape[2]
+        if frames > 3000:
+            log_mel = log_mel[:, :, :3000]
+        elif frames < 3000:
+            padding = torch.ones(1, 80, 3000 - frames, device=log_mel.device) * torch.log(torch.tensor(1e-9))
+            log_mel = torch.cat([log_mel, padding], dim=2)
+
         
-        # output shape [1, 80, time_frames]
         return log_mel
 
     

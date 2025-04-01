@@ -54,11 +54,11 @@ def parse_args():
                         help="Gradient accumulation steps")
     parser.add_argument("--num_epochs", type=int, default=5, 
                         help="Number of training epochs")
-    parser.add_argument("--learning_rate", type=float, default=5e-5, 
+    parser.add_argument("--learning_rate", type=float, default=2e-5, 
                         help="Peak learning rate")
     parser.add_argument("--weight_decay", type=float, default=0.01, 
                         help="Weight decay")
-    parser.add_argument("--warmup_steps", type=int, default=25, 
+    parser.add_argument("--warmup_steps", type=int, default=50, 
                         help="Learning rate warmup steps")
     parser.add_argument("--max_grad_norm", type=float, default=2.0, 
                         help="Maximum gradient norm for clipping")
@@ -68,9 +68,9 @@ def parse_args():
     # Other parameters
     parser.add_argument("--save_steps", type=int, default=50, 
                         help="Save checkpoint every X steps")
-    parser.add_argument("--eval_steps", type=int, default=50, 
+    parser.add_argument("--eval_steps", type=int, default=100, 
                         help="Evaluate every X steps")
-    parser.add_argument("--log_steps", type=int, default=10, 
+    parser.add_argument("--log_steps", type=int, default=5, 
                         help="Log every X steps")
     parser.add_argument("--max_audio_length", type=int, default=30, 
                         help="Maximum audio length in seconds")
@@ -225,8 +225,7 @@ def train(args):
     logger.info("Initializing AudioLLM model...")
     model = AudioLLM(
         llama_path=args.llama_path,
-        whisper_path=args.whisper_path,
-        lora_rank=args.lora_rank
+        whisper_path=args.whisper_path
     )
     model.llama.model.resize_token_embeddings(len(llama_tokenizer))
     

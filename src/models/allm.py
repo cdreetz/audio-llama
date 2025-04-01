@@ -6,7 +6,7 @@ from models.projector import AudioProjector
 from models.lora import apply_lora_to_llama, lora_forward_hook
 
 class AudioLLM(nn.Module):
-    def __init__(self, llama_path, whisper_path, lora_rank=160):
+    def __init__(self, llama_path, whisper_path, lora_rank=64):
         super().__init__()
         
         # load base models
@@ -17,7 +17,7 @@ class AudioLLM(nn.Module):
         llama_dim = self.llama.model.config.hidden_size  # e.g., 4096
         print(f"Whisper dimension: {whisper_dim}, LLaMA dimension: {llama_dim}")
 
-        self.projector = AudioProjector(features_dim, llama_dim)
+        self.projector = AudioProjector(whisper_dim, llama_dim)
         
         # apply LoRA to LLaMA
         self.lora_layers = apply_lora_to_llama(self.llama.model, rank=lora_rank)
@@ -211,8 +211,10 @@ class AudioLLM(nn.Module):
         if next(self.whisper_encoder.model.parameters()).device != device:
             self.whisper_encoder.model = self.whisper_encoder.model.to(device)
 
+        audio_features = audio_features.squeeze(1)
 
         with torch.no_grad():
+            print("audio features shape before encode", audio_features.shape)
             whisper_output = self.whisper_encoder.model(audio_features)
             whisper_embeddings = whisper_output.last_hidden_state
 
