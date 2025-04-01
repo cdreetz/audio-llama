@@ -98,7 +98,7 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     np.random.seed(seed)
 
-def save_checkpoint(model, optimizer, scheduler, step, epoch, args, final=False):
+def save_checkpoint(model, optimizer, scheduler, step, epoch, args, dataset_config=None, final=False):
     """Save model checkpoint"""
     os.makedirs(args.output_dir, exist_ok=True)
     
@@ -177,9 +177,13 @@ def train(args):
     
     # Initialize logging
     if args.use_wandb:
+        wandb_config = vars(args).copy()
+        if args.dataset_config:
+            wandb_config.pop("dataset_config", None)
+
         wandb.init(project=args.wandb_project, config=vars(args))
         if dataset_config:
-            wandb.config.update({"dataset_config": dataset_config})
+            wandb.config.update({"dataset_config": dataset_config}, allow_val_change=True)
     
     writer = SummaryWriter(log_dir=os.path.join(args.output_dir, "logs"))
     
@@ -336,7 +340,7 @@ def train(args):
                     # Save best model
                     if eval_loss < best_eval_loss:
                         best_eval_loss = eval_loss
-                        save_checkpoint(model, optimizer, scheduler, global_step, epoch, args, final=False)
+                        save_checkpoint(model, optimizer, scheduler, global_step, epoch, args, dataset_config, final=False)
                         logger.info(f"New best model with loss: {best_eval_loss:.4f}")
                     
                     # Switch back to train mode
@@ -344,7 +348,7 @@ def train(args):
                 
                 # Save checkpoint
                 if global_step % args.save_steps == 0:
-                    save_checkpoint(model, optimizer, scheduler, global_step, epoch, args, final=False)
+                    save_checkpoint(model, optimizer, scheduler, global_step, epoch, args, dataset_config, final=False)
     
     # Final evaluation
     logger.info("Final evaluation...")
@@ -352,7 +356,7 @@ def train(args):
     logger.info(f"Final eval loss: {eval_loss:.4f}, Perplexity: {eval_ppl:.4f}")
     
     # Save final checkpoint
-    save_checkpoint(model, optimizer, scheduler, global_step, args.num_epochs-1, args, final=True)
+    save_checkpoint(model, optimizer, scheduler, global_step, args.num_epochs-1, args, dataset_config, final=True)
     logger.info("Training completed!")
     
     # Close tensorboard writer

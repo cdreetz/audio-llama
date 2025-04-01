@@ -1,8 +1,8 @@
 python train.py \
-	--data_path /home/ubuntu/audio-llama/src/librispeech_data/audio_instruction_examples.json \
-	--audio_dir /home/ubuntu/audio-llama/src/librispeech_data/audio/ \
-	--llama_path meta-llama/Llama-3.2-3B-Instruct \
-	--whisper_path openai/whisper-large-v3-turbo \
-	--output_dir ./checkpoints \
+	--data_path  data/librispeech_full/examples.json \
+	--audio_dir audio/ \
+	--dataset_config data/librispeech_full/dataset_config.json \
+	--batch_size 8 \
 	--fp16 \
+	--num_workers 16 \
 	--use_wandb 
