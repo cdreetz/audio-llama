@@ -15,7 +15,9 @@ Usage:
     For smaller test run:
     python download_librispeech.py --subsets test-clean --limit 100
 
-python get_librispeech.py --subsets test-clean --limit 100 --output_dir data/librispeech_test
+# quick download test
+python get_librispeech.py --subsets test-clean dev-clean --limit 100 --output_dir data/librispeech_test
+python get_librispeech.py --subsets test-clean test-other dev-clean dev-other train-clean-100 train-clean-360 train-other-500 --parallel --output_dir data/librispeech_full
 """
 
 import os
