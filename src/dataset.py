@@ -18,7 +18,10 @@ class AudioLLMDataset(Dataset):
         audio_padding="max_length",
         text_max_length=512,
         skip_missing_files=False,
-        use_dummy_audio_for_missing=True
+        use_dummy_audio_for_missing=True,
+        audio_key="audio_paths",
+        text_key="text",
+        response_key="response"
     ):
         self.data = data_entries
         self.audio_dir = audio_dir
@@ -28,6 +31,10 @@ class AudioLLMDataset(Dataset):
         self.sample_rate = sample_rate
         self.audio_padding = audio_padding
         self.text_max_length = text_max_length
+
+        self.audio_key = audio_key
+        self.text_key = text_key
+        self.response_key = response_key
 
         self.audio_start_token = "<audio>"
         self.audio_end_token = "</audio>"
@@ -52,26 +59,17 @@ class AudioLLMDataset(Dataset):
         item = self.data[idx]
 
         text = item.get("text", "")
-        text = item.get("text", "")
         audio_path = item.get("audio_paths", "")
         
         audio_features = None
         if audio_path:
             full_path = os.path.join(self.audio_dir, audio_path)
-            if not os.path.exists(full_path) and audio_path.startswith("audio/"):
-                # Try without 'audio/' prefix
-                fixed_path = audio_path[6:]
-                full_path = os.path.join(self.audio_dir, fixed_path)
-            
-            if os.path.exists(full_path):
-                try:
-                    audio_features = self._process_audio(full_path)
-                except Exception as e:
-                    print(f"Error processing audio file {full_path}: {str(e)}")
-                    if not self.use_dummy_audio_for_missing:
-                        raise
-            elif not self.use_dummy_audio_for_missing:
-                raise FileNotFoundError(f"Audio file not found: {full_path}")
+            try:
+                audio_features = self._process_audio(full_path)
+            except Exception as e:
+                print(f"Error processing audio file {full_path}: {str(e)}")
+                if not self.use_dummy_audio_for_missing:
+                    raise
         
         tokenized = self.llama_tokenizer(
             text,

@@ -19,7 +19,8 @@ def create_dataloaders(
     num_workers=4,
     seed=42,
     skip_missing_files=False,
-    use_dummy_audio_for_missing=True
+    use_dummy_audio_for_missing=True,
+    dataset_config=None
 ):
     """
     create train and val dataloaders for AudioLLM training
@@ -46,6 +47,14 @@ def create_dataloaders(
 
     with open(data_path, 'r', encoding='utf-8') as f:
         data_entries = json.load(f)
+
+    default_config = {
+        "audio_key": "audio_paths",
+        "text_key": "text",
+        "response_key": "response"
+    }
+
+    config = dataset_config or default_config
     
     random.shuffle(data_entries)
     split_idx = int(len(data_entries) * train_split)
@@ -62,7 +71,10 @@ def create_dataloaders(
         max_audio_length=max_audio_length,
         text_max_length=text_max_length,
         skip_missing_files=skip_missing_files,
-        use_dummy_audio_for_missing=use_dummy_audio_for_missing
+        use_dummy_audio_for_missing=use_dummy_audio_for_missing,
+        audio_key=config["audio_key"],
+        text_key=config["text_key"],
+        response_key=config["response_key"]
     )
 
     val_dataset = AudioLLMDataset(
@@ -73,7 +85,10 @@ def create_dataloaders(
         max_audio_length=max_audio_length,
         text_max_length=text_max_length,
         skip_missing_files=skip_missing_files,
-        use_dummy_audio_for_missing=use_dummy_audio_for_missing
+        use_dummy_audio_for_missing=use_dummy_audio_for_missing,
+        audio_key=config["audio_key"],
+        text_key=config["text_key"],
+        response_key=config["response_key"]
     )
     
     
@@ -95,7 +110,7 @@ def create_dataloaders(
         pin_memory=True
     )
     
-    return train_dataloader, val_dataloader
+    return train_dataloader, val_dataloader, config
 
 def get_sample_batch(dataloader):
     dataiter = iter(dataloader)
@@ -121,3 +136,6 @@ if __name__ == "__main__":
         audio_dir=audio_dir,
         batch_size=4
     )
+
+    # check sample batch
+    # sample_batch = get_sample_batch(train_dataloader)

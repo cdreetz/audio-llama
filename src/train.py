@@ -1,4 +1,5 @@
 import os
+import json
 import torch
 import logging
 import argparse
@@ -40,6 +41,8 @@ def parse_args():
                         help="Directory containing audio files")
     parser.add_argument("--output_dir", type=str, default="./checkpoints",
                         help="Directory to save model checkpoints")
+    parser.add_argument("--dataset_config", type=str, default=None,
+                        help="Path to JSON file with dataset configuration")
     
     # Training hyperparameters
     parser.add_argument("--batch_size", type=int, default=8, 
@@ -118,7 +121,9 @@ def save_checkpoint(model, optimizer, scheduler, step, epoch, args, final=False)
         'scheduler': scheduler.state_dict() if scheduler else None,
         'step': step,
         'epoch': epoch,
-        'args': args
+        #'args': args,
+        'args': vars(args),
+        "dataset_config": dataset_config
     }
     
     torch.save(checkpoint, os.path.join(checkpoint_path, "checkpoint.pt"))
@@ -162,10 +167,19 @@ def train(args):
     
     # Create output directory
     os.makedirs(args.output_dir, exist_ok=True)
+
+    # load dataset config if provided
+    dataset_config = None
+    if args.dataset_config and os.path.exists(args.dataset_config):
+        with open(args.dataset_config, 'r') as f:
+            dataset_config = json.load(f)
+        logger.info(f"Loaded dataset configuration from {args.dataset_config}")
     
     # Initialize logging
     if args.use_wandb:
-        wandb.init(project=args.wandb_project, config=args)
+        wandb.init(project=args.wandb_project, config=vars(args))
+        if dataset_config:
+            wandb.config.update({"dataset_config": dataset_config})
     
     writer = SummaryWriter(log_dir=os.path.join(args.output_dir, "logs"))
     
@@ -184,7 +198,7 @@ def train(args):
     
     # Create dataloaders
     logger.info("Creating dataloaders...")
-    train_dataloader, val_dataloader = create_dataloaders(
+    train_dataloader, val_dataloader, detected_config = create_dataloaders(
         data_path=args.data_path,
         audio_dir=args.audio_dir,
         whisper_model_id=args.whisper_path,
@@ -195,8 +209,12 @@ def train(args):
         num_workers=args.num_workers,
         seed=args.seed,
         skip_missing_files=args.skip_missing_files,
-        use_dummy_audio_for_missing=args.use_dummy_audio
+        use_dummy_audio_for_missing=args.use_dummy_audio,
+        dataset_config=dataset_config
     )
+
+    if not dataset_config:
+        dataset_config = detected_config
     
     # Initialize model
     logger.info("Initializing AudioLLM model...")

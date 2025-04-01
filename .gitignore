@@ -29,3 +29,6 @@ librispeech_data/librispeech_metadata.json
 
 audio_instruction_examples.json
 */audio_instruction_examples.json
+
+data/
+src/data/

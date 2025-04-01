@@ -72,10 +72,11 @@ class AudioLLM(nn.Module):
                 input_ids
             )
 
+            audio_embed_len = combined_embeddings.shape[1] - text_embeddings.shape[1]
+
             combined_attention_mask = self._extend_attention_mask(
                 attention_mask,
-                #audio_features.shape[2],
-                audio_seq_len=128
+                audio_seq_len=audio_embed_len - 2
             )
 
             if labels is not None:
