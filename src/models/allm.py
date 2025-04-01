@@ -6,17 +6,16 @@ from models.projector import AudioProjector
 from models.lora import apply_lora_to_llama, lora_forward_hook
 
 class AudioLLM(nn.Module):
-    def __init__(self, llama_path, whisper_path, lora_rank=320):
+    def __init__(self, llama_path, whisper_path, lora_rank=160):
         super().__init__()
         
         # load base models
         self.llama, self.whisper_encoder = load_base_models(llama_path, whisper_path)
         
         # Create projector (from Whisper dim to LLaMA dim)
-        #whisper_dim = self.whisper_encoder.model.config.d_model  # e.g., 1024
-        features_dim = 128
+        whisper_dim = self.whisper_encoder.model.config.d_model  # e.g., 1024
         llama_dim = self.llama.model.config.hidden_size  # e.g., 4096
-        print(f"Whisper dimension: {features_dim}, LLaMA dimension: {llama_dim}")
+        print(f"Whisper dimension: {whisper_dim}, LLaMA dimension: {llama_dim}")
 
         self.projector = AudioProjector(features_dim, llama_dim)
         
@@ -209,17 +208,15 @@ class AudioLLM(nn.Module):
         """
         device = audio_features.device
 
-        self.conv1 = self.conv1.to(device)
-        self.conv2 = self.conv2.to(device)
-        self.conv3 = self.conv3.to(device)
+        if next(self.whisper_encoder.model.parameters()).device != device:
+            self.whisper_encoder.model = self.whisper_encoder.model.to(device)
 
-        if len(audio_features.shape) == 3:
-            raise ValueError("Raw audio detected. Dataset should be outputting mel spectograms")
-        elif len(audio_features.shape) == 4:
-            batch_size, channels, features, time = audio_features.shape
-            x = audio_features.squeeze(1)
-        else:
-            raise ValueError("Unexpected audio features shape: {audio_features.shape}")
+
+        with torch.no_grad():
+            whisper_output = self.whisper_encoder.model(audio_features)
+            whisper_embeddings = whisper_output.last_hidden_state
+
+        return whisper_embeddings
 
         #if len(audio_features.shape) == 3:
         #    batch_size, channels, time = audio_features.shape
@@ -234,12 +231,12 @@ class AudioLLM(nn.Module):
 
         # apply convolutions (need to switch dimension for conv1d)
         #x = x.transpose(1, 2) # [batch, features, time]
-        x = self.relu(self.conv1(x))
-        x = self.relu(self.conv2(x))
-        x = self.relu(self.conv3(x))
-        x = x.transpose(1, 2) # [batch, time/8, features]
+        #x = self.relu(self.conv1(x))
+        #x = self.relu(self.conv2(x))
+        #x = self.relu(self.conv3(x))
+        #x = x.transpose(1, 2) # [batch, time/8, features]
 
-        return x
+        #return x
 
     
     def get_trainable_params(self):

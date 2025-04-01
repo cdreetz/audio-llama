@@ -124,8 +124,8 @@ class AudioLLMDataset(Dataset):
 
         mel_spectrogram = torchaudio.transforms.MelSpectrogram(
             sample_rate=self.sample_rate,
-            n_fft=400,
-            hop_length=160,
+            n_fft=400,          # ~25ms window at 16kHz
+            hop_length=160,     # ~10ms hop at 16kHz
             n_mels=80,
             power=2.0
         )(waveform)
